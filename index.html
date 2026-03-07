@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My 20-Day Study Plan ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Nunito:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fff8f9;
+    --rose: #f2a7bb;
+    --rose-deep: #e07898;
+    --rose-light: #fde4ed;
+    --lilac: #d4b8e0;
+    --lilac-light: #f0e6f8;
+    --peach: #f9cba0;
+    --peach-light: #fef3e8;
+    --mint: #b5ddd4;
+    --mint-light: #e8f7f4;
+    --text: #4a3040;
+    --text-soft: #9a7b88;
+    --white: #ffffff;
+    --border: rgba(242,167,187,0.3);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 10% 10%, rgba(212,184,224,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 90% 80%, rgba(242,167,187,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(249,203,160,0.12) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+  .deco { position:fixed; pointer-events:none; z-index:0; font-size:22px; animation:floaty 6s ease-in-out infinite; opacity:0.18; user-select:none; }
+  .deco:nth-child(1){top:8%;left:4%;animation-delay:0s}
+  .deco:nth-child(2){top:20%;right:5%;animation-delay:1.5s}
+  .deco:nth-child(3){top:55%;left:2%;animation-delay:3s}
+  .deco:nth-child(4){bottom:20%;right:4%;animation-delay:2s}
+  .deco:nth-child(5){bottom:8%;left:8%;animation-delay:4s}
+  @keyframes floaty { 0%,100%{transform:translateY(0)rotate(0)} 50%{transform:translateY(-12px)rotate(8deg)} }
+
+  .container { max-width:800px; margin:0 auto; padding:48px 24px 100px; position:relative; z-index:1; }
+
+  /* ── HEADER ── */
+  .header { text-align:center; margin-bottom:48px; }
+  .header-ribbon {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--rose-light); color:var(--rose-deep);
+    font-size:11px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+    padding:6px 18px; border-radius:100px; margin-bottom:20px;
+    border:1px solid rgba(242,167,187,0.4);
+  }
+  .header h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(2.8rem,7vw,5rem); font-weight:300; line-height:1.1; letter-spacing:-0.01em; }
+  .header h1 em { font-style:italic; color:var(--rose-deep); font-weight:400; }
+  .header h1 .cursive { font-family:'Pacifico',cursive; font-size:0.7em; color:var(--lilac); display:block; margin-top:6px; }
+  .header-divider { display:flex; align-items:center; justify-content:center; gap:12px; margin:18px 0 14px; color:var(--rose); font-size:16px; opacity:0.6; }
+  .header-divider::before { content:''; width:60px; height:1px; background:linear-gradient(90deg,transparent,var(--rose)); }
+  .header-divider::after  { content:''; width:60px; height:1px; background:linear-gradient(90deg,var(--rose),transparent); }
+  .header-sub { color:var(--text-soft); font-size:13.5px; line-height:1.7; max-width:420px; margin:0 auto; }
+
+  /* ── PROGRESS CARD ── */
+  .progress-card {
+    background:var(--white); border-radius:20px; padding:20px 24px; margin-bottom:28px;
+    border:1.5px solid var(--border); box-shadow:0 4px 24px rgba(242,167,187,0.12);
+    display:flex; align-items:center; gap:20px;
+  }
+  .progress-ring-wrap { flex-shrink:0; position:relative; width:64px; height:64px; }
+  .progress-ring-wrap svg { transform:rotate(-90deg); }
+  .ring-bg  { stroke:var(--rose-light); }
+  .ring-fill { stroke:var(--rose-deep); stroke-linecap:round; transition:stroke-dashoffset 0.7s cubic-bezier(0.4,0,0.2,1); }
+  .ring-text { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--rose-deep); }
+  .progress-info { flex:1; }
+  .progress-label { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-soft); margin-bottom:6px; }
+  .progress-bar-track { height:8px; background:var(--rose-light); border-radius:100px; overflow:hidden; margin-bottom:6px; }
+  .progress-bar-fill { height:100%; background:linear-gradient(90deg,var(--rose),var(--rose-deep)); border-radius:100px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1); width:0%; }
+  .progress-stat { font-size:12px; color:var(--text-soft); }
+  .progress-stat strong { color:var(--rose-deep); }
+
+  /* ── 5-HOUR BONUS BADGE ── */
+  .bonus-badge {
+    background:var(--white); border-radius:16px; padding:14px 20px; margin-bottom:28px;
+    border:1.5px solid var(--border); box-shadow:0 4px 16px rgba(242,167,187,0.1);
+    display:flex; align-items:center; gap:14px;
+  }
+  .bonus-badge .bonus-icon { font-size:28px; flex-shrink:0; }
+  .bonus-badge .bonus-info { flex:1; }
+  .bonus-badge .bonus-title { font-size:12px; font-weight:700; color:var(--text); margin-bottom:3px; }
+  .bonus-badge .bonus-sub { font-size:11px; color:var(--text-soft); }
+  .bonus-pips { display:flex; gap:5px; flex-wrap:wrap; }
+  .pip {
+    width:22px; height:22px; border-radius:50%;
+    border:2px solid rgba(242,167,187,0.4);
+    background:var(--white); display:flex; align-items:center; justify-content:center;
+    font-size:9px; transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    color:var(--text-soft); font-weight:700;
+  }
+  .pip.earned { background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-color:var(--rose-deep); color:white; box-shadow:0 2px 8px rgba(224,120,152,0.3); }
+
+  /* ── POMODORO TIMER ── */
+  .pomodoro-card {
+    background:var(--white); border-radius:24px; padding:28px 28px 24px;
+    border:1.5px solid var(--border); box-shadow:0 6px 32px rgba(242,167,187,0.15);
+    margin-bottom:28px; position:relative; overflow:hidden;
+  }
+  .pomodoro-card::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg, var(--rose-light), var(--rose), var(--lilac), var(--peach));
+  }
+  .pomo-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .pomo-title { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; font-style:italic; color:var(--rose-deep); }
+  .pomo-mode-pills { display:flex; gap:6px; }
+  .mode-pill {
+    padding:5px 12px; border-radius:100px; font-size:11px; font-weight:700;
+    letter-spacing:0.08em; cursor:pointer; transition:all 0.2s;
+    border:1.5px solid transparent;
+  }
+  .mode-pill.focus   { background:var(--rose-light);  color:var(--rose-deep);  border-color:rgba(242,167,187,0.4); }
+  .mode-pill.sbreak  { background:var(--mint-light);   color:#3a9080;           border-color:rgba(181,221,212,0.4); }
+  .mode-pill.lbreak  { background:var(--lilac-light);  color:#8b5fbf;           border-color:rgba(212,184,224,0.4); }
+  .mode-pill.active  { transform:translateY(-1px); box-shadow:0 4px 12px rgba(242,167,187,0.25); }
+  .mode-pill.focus.active  { background:var(--rose-deep); color:white; border-color:var(--rose-deep); }
+  .mode-pill.sbreak.active { background:#3a9080; color:white; border-color:#3a9080; }
+  .mode-pill.lbreak.active { background:#8b5fbf; color:white; border-color:#8b5fbf; }
+
+  .pomo-body { display:flex; align-items:center; gap:28px; }
+
+  /* SVG ring timer */
+  .pomo-ring-wrap { flex-shrink:0; position:relative; width:140px; height:140px; }
+  .pomo-ring-wrap svg { transform:rotate(-90deg); width:140px; height:140px; }
+  .pomo-ring-bg   { stroke:var(--rose-light); }
+  .pomo-ring-fill { stroke:var(--rose-deep); stroke-linecap:round; transition:stroke-dashoffset 1s linear, stroke 0.4s; }
+  .pomo-ring-center {
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .pomo-time { font-family:'Cormorant Garamond',serif; font-size:2.6rem; font-weight:600; color:var(--text); line-height:1; }
+  .pomo-label { font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-soft); margin-top:4px; }
+
+  .pomo-controls { flex:1; }
+  .pomo-session-info { margin-bottom:16px; }
+  .pomo-session-label { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-soft); margin-bottom:6px; }
+  .pomo-session-count { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:600; color:var(--text); }
+  .pomo-session-count span { font-size:1rem; color:var(--text-soft); font-weight:300; }
+
+  /* Daily study time */
+  .pomo-daily { margin-bottom:16px; }
+  .pomo-daily-label { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-soft); margin-bottom:6px; }
+  .pomo-daily-bar-track { height:8px; background:var(--peach-light); border-radius:100px; overflow:hidden; margin-bottom:4px; }
+  .pomo-daily-bar-fill {
+    height:100%; border-radius:100px;
+    background:linear-gradient(90deg, var(--peach), #f0a050);
+    transition:width 0.5s ease; width:0%;
+  }
+  .pomo-daily-stat { font-size:11px; color:var(--text-soft); }
+  .pomo-daily-stat strong { color:#c97c30; }
+
+  .pomo-btn-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .pomo-btn {
+    padding:10px 18px; border-radius:100px; border:1.5px solid;
+    font-family:'Nunito',sans-serif; font-size:12px; font-weight:700;
+    cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);
+    display:flex; align-items:center; gap:6px;
+  }
+  .pomo-btn.primary { background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-color:var(--rose-deep); color:white; box-shadow:0 4px 14px rgba(224,120,152,0.3); }
+  .pomo-btn.primary:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(224,120,152,0.4); }
+  .pomo-btn.secondary { background:var(--white); border-color:var(--border); color:var(--text-soft); }
+  .pomo-btn.secondary:hover { border-color:var(--rose); color:var(--rose-deep); background:var(--rose-light); }
+  .pomo-btn.skip { background:var(--lilac-light); border-color:rgba(212,184,224,0.5); color:#8b5fbf; }
+  .pomo-btn.skip:hover { background:var(--lilac); color:white; }
+
+  /* session dots */
+  .pomo-dots { display:flex; gap:5px; margin-top:12px; }
+  .pomo-dot { width:10px; height:10px; border-radius:50%; background:var(--rose-light); border:1.5px solid rgba(242,167,187,0.4); transition:all 0.3s; }
+  .pomo-dot.done { background:var(--rose-deep); border-color:var(--rose-deep); }
+  .pomo-dot.active { background:var(--rose); border-color:var(--rose); animation:pulse-dot 1s ease infinite; }
+  @keyframes pulse-dot { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+
+  /* bonus unlocked animation */
+  .bonus-pop {
+    display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.7);
+    background:var(--white); border-radius:24px; padding:32px 40px; text-align:center;
+    border:2px solid var(--rose); box-shadow:0 20px 60px rgba(242,167,187,0.4);
+    z-index:1000; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .bonus-pop.show { display:block; transform:translate(-50%,-50%) scale(1); }
+  .bonus-pop-emoji { font-size:48px; display:block; margin-bottom:12px; }
+  .bonus-pop-title { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; color:var(--rose-deep); margin-bottom:6px; }
+  .bonus-pop-sub { font-size:13px; color:var(--text-soft); }
+  .bonus-overlay { display:none; position:fixed; inset:0; background:rgba(74,48,64,0.3); z-index:999; backdrop-filter:blur(4px); }
+  .bonus-overlay.show { display:block; }
+
+  /* ── DAY NAV ── */
+  .day-nav-wrap { margin-bottom:36px; }
+  .day-nav-label { font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-soft); margin-bottom:12px; text-align:center; }
+  .day-nav { display:flex; gap:7px; flex-wrap:wrap; justify-content:center; }
+  .day-tab {
+    width:38px; height:38px; border-radius:50%;
+    border:1.5px solid rgba(242,167,187,0.4); background:var(--white);
+    color:var(--text-soft); font-family:'Nunito',sans-serif; font-size:12px; font-weight:600;
+    cursor:pointer; transition:all 0.22s cubic-bezier(0.4,0,0.2,1);
+    display:flex; align-items:center; justify-content:center; position:relative;
+    box-shadow:0 2px 8px rgba(242,167,187,0.08);
+  }
+  .day-tab:hover { border-color:var(--rose); color:var(--rose-deep); transform:translateY(-2px); box-shadow:0 6px 16px rgba(242,167,187,0.2); }
+  .day-tab.active { background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-color:var(--rose-deep); color:white; transform:translateY(-2px) scale(1.08); box-shadow:0 8px 20px rgba(224,120,152,0.35); }
+  .day-tab.completed::after { content:'✓'; position:absolute; top:-4px; right:-4px; width:14px; height:14px; border-radius:50%; background:var(--mint); color:white; font-size:8px; display:flex; align-items:center; justify-content:center; font-weight:700; line-height:14px; text-align:center; }
+
+  /* ── DAY PANEL ── */
+  .day-panel { animation:softIn 0.4s cubic-bezier(0.4,0,0.2,1); }
+  @keyframes softIn { from{opacity:0;transform:translateY(16px) scale(0.99)} to{opacity:1;transform:translateY(0) scale(1)} }
+  .cycle-badge { display:inline-flex; align-items:center; gap:7px; padding:5px 14px 5px 10px; border-radius:100px; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px; }
+  .cycle-badge .dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+  .cycle-badge.c1     { background:#fde4ed; color:#d4607a; border:1px solid rgba(212,96,122,0.2); }
+  .cycle-badge.c2     { background:var(--lilac-light); color:#8b5fbf; border:1px solid rgba(139,95,191,0.2); }
+  .cycle-badge.c3     { background:var(--peach-light); color:#c97c30; border:1px solid rgba(201,124,48,0.2); }
+  .cycle-badge.sprint { background:var(--mint-light); color:#3a9080; border:1px solid rgba(58,144,128,0.2); }
+  .day-complete-banner { display:none; align-items:center; gap:12px; padding:14px 20px; background:linear-gradient(135deg,var(--mint-light),#d0f0ea); border:1.5px solid var(--mint); border-radius:14px; font-size:13px; color:#3a9080; font-weight:600; margin-bottom:20px; }
+  .day-complete-banner.visible { display:flex; animation:softIn 0.4s ease; }
+  .day-header-card { background:var(--white); border-radius:20px 20px 0 0; padding:24px 28px 20px; border:1.5px solid var(--border); border-bottom:none; position:relative; overflow:hidden; }
+  .day-header-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--rose-light),var(--rose),var(--lilac)); border-radius:20px 20px 0 0; }
+  .day-title { font-family:'Cormorant Garamond',serif; font-size:1.9rem; font-weight:600; letter-spacing:-0.01em; color:var(--text); line-height:1.2; margin-bottom:6px; }
+  .day-focus { font-size:12.5px; color:var(--text-soft); display:flex; align-items:center; gap:8px; }
+  .day-focus::before { content:'🌸'; font-size:13px; }
+  .tasks-card { background:var(--white); border:1.5px solid var(--border); border-top:none; border-radius:0 0 20px 20px; padding:0 28px 24px; box-shadow:0 8px 32px rgba(242,167,187,0.1); }
+  .task-group { padding-top:20px; }
+  .task-group-label { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--rose); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .task-group-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--rose-light),transparent); }
+  .task-item { display:flex; align-items:flex-start; gap:13px; padding:13px 16px; border-radius:14px; border:1.5px solid transparent; background:var(--bg); margin-bottom:8px; cursor:pointer; transition:all 0.25s cubic-bezier(0.4,0,0.2,1); user-select:none; }
+  .task-item:hover { background:var(--rose-light); border-color:rgba(242,167,187,0.4); transform:translateX(4px); }
+  .task-item.done { background:linear-gradient(135deg,#fff0f5,#fde8f0); border-color:rgba(242,167,187,0.5); }
+  .task-item.done .task-text { color:var(--text-soft); text-decoration:line-through; text-decoration-color:var(--rose); text-decoration-thickness:1.5px; }
+  .checkbox { width:22px; height:22px; border-radius:50%; border:2px solid rgba(242,167,187,0.6); flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1); background:white; }
+  .task-item:hover .checkbox { border-color:var(--rose); transform:scale(1.1); }
+  .task-item.done .checkbox { background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-color:var(--rose-deep); transform:scale(1.05); box-shadow:0 3px 10px rgba(224,120,152,0.3); }
+  .checkbox svg { opacity:0; transform:scale(0.3) rotate(-20deg); transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+  .task-item.done .checkbox svg { opacity:1; transform:scale(1) rotate(0deg); }
+  .task-content { flex:1; }
+  .task-text { font-size:13.5px; line-height:1.6; color:var(--text); font-weight:400; transition:all 0.2s; }
+  .task-tag { display:inline-flex; align-items:center; gap:4px; margin-top:6px; padding:3px 9px; border-radius:100px; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+  .tag-theory { background:var(--lilac-light); color:#8b5fbf; }
+  .tag-solve  { background:var(--rose-light);  color:var(--rose-deep); }
+  .tag-review { background:var(--peach-light); color:#c97c30; }
+  .tag-tip    { background:var(--mint-light);  color:#3a9080; }
+  .tag-mock   { background:#f5f5f5; color:#9a7b88; }
+
+  /* ── PRO TIPS ── */
+  .pro-tips { margin-top:32px; background:var(--white); border-radius:20px; padding:24px 28px; border:1.5px solid var(--border); box-shadow:0 4px 24px rgba(242,167,187,0.08); position:relative; overflow:hidden; }
+  .pro-tips::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--lilac),var(--rose),var(--peach)); }
+  .pro-tips-title { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; font-style:italic; color:var(--rose-deep); margin-bottom:16px; }
+  .tip-row { display:flex; gap:12px; margin-bottom:11px; font-size:13px; line-height:1.65; color:var(--text-soft); align-items:flex-start; }
+  .tip-row strong { color:var(--text); font-weight:600; }
+
+  .bottom-actions { display:flex; justify-content:center; margin-top:28px; }
+  .reset-btn { background:none; border:1.5px solid rgba(242,167,187,0.5); color:var(--text-soft); font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:10px 22px; border-radius:100px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:7px; }
+  .reset-btn:hover { border-color:var(--rose); color:var(--rose-deep); background:var(--rose-light); transform:translateY(-1px); }
+
+  /* ── DAY LAYOUT (panel + note side by side) ── */
+  .day-layout { display:grid; grid-template-columns:1fr 240px; gap:20px; align-items:start; }
+  @media(max-width:680px){ .day-layout { grid-template-columns:1fr; } }
+
+  /* ── DAILY NOTE BOX ── */
+  .note-box {
+    background:var(--white);
+    border-radius:20px;
+    border:1.5px solid var(--border);
+    box-shadow:0 4px 24px rgba(242,167,187,0.1);
+    overflow:hidden;
+    position:sticky;
+    top:24px;
+  }
+  .note-box-header {
+    padding:14px 16px 10px;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    position:relative;
+  }
+  .note-box-header::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--peach), var(--rose), var(--lilac));
+  }
+  .note-box-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:1rem; font-weight:600; font-style:italic;
+    color:var(--rose-deep);
+    display:flex; align-items:center; gap:6px;
+  }
+  .note-saved-indicator {
+    font-size:10px; color:var(--mint); font-weight:700;
+    letter-spacing:0.08em; text-transform:uppercase;
+    opacity:0; transition:opacity 0.4s;
+  }
+  .note-saved-indicator.visible { opacity:1; }
+  .note-textarea {
+    width:100%; min-height:220px; resize:vertical;
+    border:none; outline:none;
+    background:transparent;
+    font-family:'Nunito',sans-serif;
+    font-size:13px; line-height:1.7;
+    color:var(--text);
+    padding:14px 16px;
+    caret-color:var(--rose-deep);
+  }
+  .note-textarea::placeholder { color:rgba(154,123,136,0.45); font-style:italic; }
+  .note-footer {
+    padding:8px 16px 12px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-top:1px solid rgba(242,167,187,0.15);
+  }
+  .note-char-count { font-size:10px; color:var(--text-soft); letter-spacing:0.05em; }
+  .note-clear-btn {
+    background:none; border:none; cursor:pointer;
+    font-size:10px; color:rgba(154,123,136,0.5);
+    font-family:'Nunito',sans-serif; font-weight:600;
+    letter-spacing:0.08em; text-transform:uppercase;
+    padding:3px 6px; border-radius:6px;
+    transition:all 0.2s;
+  }
+  .note-clear-btn:hover { color:var(--rose-deep); background:var(--rose-light); }
+
+  /* notification bell pulse */
+  @keyframes bell-ring { 0%,100%{transform:rotate(0)} 15%{transform:rotate(12deg)} 30%{transform:rotate(-10deg)} 45%{transform:rotate(8deg)} 60%{transform:rotate(-6deg)} 75%{transform:rotate(4deg)} }
+  .ring-bell { display:inline-block; animation:bell-ring 0.8s ease; }
+</style>
+</head>
+<body>
+<div class="deco">🌸</div>
+<div class="deco">✨</div>
+<div class="deco">🌷</div>
+<div class="deco">💫</div>
+<div class="deco">🌺</div>
+
+<!-- Bonus pop-up overlay -->
+<div class="bonus-overlay" id="bonusOverlay" onclick="closeBonusPop()"></div>
+<div class="bonus-pop" id="bonusPop">
+  <span class="bonus-pop-emoji">🎀</span>
+  <div class="bonus-pop-title">5 Hours Unlocked!</div>
+  <div class="bonus-pop-sub">You studied 5 hours today 🌸<br>That's a bonus progress point, superstar!</div>
+  <br>
+  <button class="pomo-btn primary" onclick="closeBonusPop()" style="margin:0 auto;display:flex">Yay! ✨</button>
+</div>
+
+<div class="container">
+  <header class="header">
+    <div class="header-ribbon">✦ Hybrid Spike Strategy ✦</div>
+    <h1>My <em>20-Day</em> Study Plan<span class="cursive">you've got this 🎀</span></h1>
+    <div class="header-divider">✿</div>
+    <p class="header-sub">Active recall → Timed exposure → Autopsy. One beautiful day at a time, no panic — just process and progress.</p>
+  </header>
+
+  <!-- Overall progress -->
+  <div class="progress-card">
+    <div class="progress-ring-wrap">
+      <svg width="64" height="64" viewBox="0 0 64 64">
+        <circle class="ring-bg"   cx="32" cy="32" r="26" stroke-width="5" fill="none"/>
+        <circle class="ring-fill" id="ringFill" cx="32" cy="32" r="26" stroke-width="5" fill="none" stroke-dasharray="163.4" stroke-dashoffset="163.4"/>
+      </svg>
+      <div class="ring-text" id="ringPct">0%</div>
+    </div>
+    <div class="progress-info">
+      <div class="progress-label">Overall Progress ✨</div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-stat">
+        <strong id="progressDone">0</strong> of <strong id="progressTotal">0</strong> tasks complete — keep going, superstar!
+      </div>
+    </div>
+  </div>
+
+  <!-- 5-hour bonus tracker -->
+  <div class="bonus-badge">
+    <div class="bonus-icon">⏱️</div>
+    <div class="bonus-info">
+      <div class="bonus-title">5-Hour Hustle Bonus 🎀 — each day you hit 5h gets a ✦ star</div>
+      <div class="bonus-sub" id="bonusSub">0 / 20 days with 5+ hours studied</div>
+    </div>
+    <div class="bonus-pips" id="bonusPips"></div>
+  </div>
+
+  <!-- ── POMODORO TIMER ── -->
+  <div class="pomodoro-card">
+    <div class="pomo-header">
+      <div class="pomo-title">🍅 Pomodoro Timer</div>
+      <div class="pomo-mode-pills">
+        <button class="mode-pill focus active"  id="modeWork"   onclick="setMode('work')">Focus 50</button>
+        <button class="mode-pill sbreak"         id="modeShort"  onclick="setMode('short')">Break 10</button>
+        <button class="mode-pill lbreak"         id="modeLong"   onclick="setMode('long')">Long 30</button>
+      </div>
+    </div>
+    <div class="pomo-body">
+      <!-- Ring -->
+      <div class="pomo-ring-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="pomo-ring-bg"   cx="70" cy="70" r="58" stroke-width="7" fill="none"/>
+          <circle class="pomo-ring-fill" id="pomoRingFill" cx="70" cy="70" r="58" stroke-width="7" fill="none"
+            stroke-dasharray="364.4" stroke-dashoffset="0"/>
+        </svg>
+        <div class="pomo-ring-center">
+          <div class="pomo-time"  id="pomoTime">50:00</div>
+          <div class="pomo-label" id="pomoModeLabel">Focus</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="pomo-controls">
+        <div class="pomo-session-info">
+          <div class="pomo-session-label">Sessions today</div>
+          <div class="pomo-session-count"><span id="pomoSessions">0</span> <span>sessions</span></div>
+        </div>
+        <div class="pomo-daily">
+          <div class="pomo-daily-label">Today's study time ☀️</div>
+          <div class="pomo-daily-bar-track">
+            <div class="pomo-daily-bar-fill" id="dailyFill"></div>
+          </div>
+          <div class="pomo-daily-stat"><strong id="dailyTimeDisplay">0h 0m</strong> / 5h goal</div>
+        </div>
+        <div class="pomo-btn-row">
+          <button class="pomo-btn primary" id="pomoStartBtn" onclick="toggleTimer()">▶ Start</button>
+          <button class="pomo-btn secondary" onclick="resetTimer()">↺ Reset</button>
+          <button class="pomo-btn skip" onclick="skipTimer()">⏭ Skip</button>
+        </div>
+        <div class="pomo-dots" id="pomoDots"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day nav -->
+  <div class="day-nav-wrap">
+    <div class="day-nav-label">Choose your day 🌸</div>
+    <div class="day-nav" id="dayNav"></div>
+  </div>
+
+  <div class="day-layout">
+    <div id="dayPanel"></div>
+
+    <!-- Daily note -->
+    <div class="note-box" id="noteBox">
+      <div class="note-box-header">
+        <div class="note-box-title">📝 Today's notes</div>
+        <span class="note-saved-indicator" id="noteSavedIndicator">✓ saved</span>
+      </div>
+      <textarea class="note-textarea" id="noteTextarea"
+        placeholder="jot down anything… topics to revisit, how you felt, scores, random thoughts 🌸"
+        maxlength="1000"></textarea>
+      <div class="note-footer">
+        <span class="note-char-count" id="noteCharCount">0 / 1000</span>
+        <button class="note-clear-btn" id="noteClearBtn">clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pro-tips">
+    <div class="pro-tips-title">💌 Daily Reminders, gorgeous</div>
+    <div class="tip-row"><span>🕐</span><span><strong>50/10 Rule —</strong> 50 min focus, 10 min break. Your brain peaks at the start and end of each block.</span></div>
+    <div class="tip-row"><span>🐸</span><span><strong>Eat the Frog —</strong> Start with the subject you hate at 7:30 PM. Willpower is highest then.</span></div>
+    <div class="tip-row"><span>📋</span><span><strong>Mark Scheme = Gold —</strong> Examiners reuse the exact same phrases. Memorise them for CS & Physics.</span></div>
+    <div class="tip-row"><span>🩺</span><span><strong>The Autopsy —</strong> After every paper, dissect every wrong answer. Keywords matter more than the answer.</span></div>
+  </div>
+
+  <div class="bottom-actions">
+    <button class="reset-btn" id="resetBtn">↺ Reset today's checklist</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+const DAYS = [
+  { title:"Day 1 — Physics P4 Theory", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"Physics Paper 4 · Active Recall Revision",
+    groups:[
+      { label:"Warm-up 🌤", tasks:[
+        {text:"Review the P4 syllabus — highlight every topic you feel shaky on",tag:"theory"},
+        {text:"Blurt Method: Pick 2 topics (e.g. Gravitational Fields, Capacitance) — write everything you remember on blank paper first",tag:"theory"},
+      ]},
+      { label:"Main Session ✨ (7:30 PM – 1:00 AM)", tasks:[
+        {text:"Feynman Technique: Explain Capacitance charging/discharging out loud like you're teaching a 10-year-old",tag:"theory"},
+        {text:"Feynman Technique: Explain Magnetic Flux & Faraday's Law",tag:"theory"},
+        {text:"Fill in your Blurt gaps using a different colour pen",tag:"theory"},
+        {text:"Summarise Thermal Physics key equations on a flashcard",tag:"theory"},
+        {text:"Make a 1-page formula sheet for P4 (no peeking while solving tomorrow!)",tag:"theory"},
+      ]},
+    ]
+  },
+  { title:"Day 2 — Physics P4 Papers", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"Physics Paper 4 · Timed Exposure & Autopsy",
+    groups:[
+      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full P4 yearly paper under exam conditions — no phone, strictly timed",tag:"solve"}]},
+      { label:"Afternoon 💛 (2 hrs)", tasks:[
+        {text:"Mark your paper with the official mark scheme",tag:"review"},
+        {text:"Highlight every keyword the examiner wanted — write them in your notebook",tag:"review"},
+        {text:"List all topics you dropped marks on",tag:"review"},
+      ]},
+      { label:"Evening 🌙 (1 hr)", tasks:[
+        {text:"Solve classified questions ONLY on the weak topics you identified this afternoon",tag:"solve"},
+        {text:"Solve a second past paper if time allows (mark it quickly!)",tag:"solve"},
+      ]},
+    ]
+  },
+  { title:"Day 3 — Maths P3 Theory", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"Maths Paper 3 · Integration, Vectors & Complex Numbers",
+    groups:[
+      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write all Integration techniques you remember (by parts, partial fractions, substitution)",tag:"theory"}]},
+      { label:"Main Session ✨", tasks:[
+        {text:"Feynman: Explain Complex Numbers (modulus-argument form, loci) out loud",tag:"theory"},
+        {text:"Feynman: Explain Vectors (line equations, planes, intersections)",tag:"theory"},
+        {text:"Practice 5 integration questions from your notes without looking at worked solutions",tag:"solve"},
+        {text:"Fill gaps in your Blurt notes — different colour pen",tag:"theory"},
+        {text:"Make a formula flashcard: Differential Equations + Vectors",tag:"theory"},
+      ]},
+    ]
+  },
+  { title:"Day 4 — Maths P3 Papers", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"Maths Paper 3 · Timed Exposure & Autopsy",
+    groups:[
+      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full P3 yearly paper — strictly timed, no formula sheet",tag:"solve"}]},
+      { label:"Afternoon 💛 (2 hrs)", tasks:[
+        {text:"Mark with mark scheme — note every method mark you missed",tag:"review"},
+        {text:"Identify your 3 weakest P3 topics from this paper",tag:"review"},
+      ]},
+      { label:"Evening 🌙 (1 hr)", tasks:[
+        {text:"Classified questions on the 3 weak topics only",tag:"solve"},
+        {text:"Attempt a second P3 paper (mark and record your score!)",tag:"solve"},
+      ]},
+    ]
+  },
+  { title:"Day 5 — CS P3 Theory", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"CS Paper 3 · Advanced Theory",
+    groups:[
+      { label:"Warm-up 🌤", tasks:[
+        {text:"Blurt: Write everything you know about Normalisation (1NF, 2NF, 3NF)",tag:"theory"},
+        {text:"Blurt: Write everything you know about TCP/IP layers and protocols",tag:"theory"},
+      ]},
+      { label:"Main Session ✨", tasks:[
+        {text:"Feynman: Explain Database Transactions (ACID properties) out loud",tag:"theory"},
+        {text:"Feynman: Explain Encryption methods (symmetric vs asymmetric)",tag:"theory"},
+        {text:"Feynman: Explain OOP concepts — polymorphism, inheritance, encapsulation",tag:"theory"},
+        {text:"Write 10 examiner-style keywords for P3 from past mark schemes",tag:"theory"},
+        {text:"Fill in gaps with notes — different colour pen!",tag:"theory"},
+      ]},
+    ]
+  },
+  { title:"Day 6 — CS P3 Papers", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"CS Paper 3 · Timed Exposure & Autopsy",
+    groups:[
+      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full CS P3 paper — timed, no notes",tag:"solve"}]},
+      { label:"Afternoon 💛 (2 hrs)", tasks:[
+        {text:"Mark with mark scheme — circle every exact phrase the examiner wanted",tag:"review"},
+        {text:"Write out the exact examiner phrases in a 'phrase bank' notebook",tag:"review"},
+      ]},
+      { label:"Evening 🌙 (1 hr)", tasks:[
+        {text:"Classified questions on weak P3 topics",tag:"solve"},
+        {text:"Attempt a second CS P3 paper",tag:"solve"},
+      ]},
+    ]
+  },
+  { title:"Day 7 — Physics P2 & P5", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"Physics Paper 2 + Paper 5 · Mechanics & Practical Skills",
+    groups:[
+      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write all Mechanics equations (SUVAT, moments, circular motion)",tag:"theory"}]},
+      { label:"Main Session ✨", tasks:[
+        {text:"Feynman: Explain P5 planning-an-experiment questions (variables, controls, method)",tag:"theory"},
+        {text:"Practice 3 P5 'design an experiment' questions from past papers",tag:"solve"},
+        {text:"Review P2 waves + superposition notes",tag:"theory"},
+        {text:"Make formula flashcard for P2 key equations",tag:"theory"},
+      ]},
+    ]
+  },
+  { title:"Day 8 — Physics P2 & P5 Papers", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"Physics Paper 2 + Paper 5 · Timed Exposure",
+    groups:[
+      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full P2 yearly paper — timed",tag:"solve"}]},
+      { label:"Afternoon 💛 (2 hrs)", tasks:[
+        {text:"Solve 1 full P5 yearly paper — timed",tag:"solve"},
+        {text:"Mark both papers and do The Autopsy 🩺",tag:"review"},
+      ]},
+      { label:"Evening 🌙 (1 hr)", tasks:[{text:"Classified questions on weak P2/P5 areas",tag:"solve"}]},
+    ]
+  },
+  { title:"Day 9 — Maths P1 & S1 Theory", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"Maths Paper 1 + S1 · Speed & Easy Marks",
+    groups:[
+      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write all P1 formulas — binomial, series, differentiation rules",tag:"theory"}]},
+      { label:"Main Session ✨", tasks:[
+        {text:"Feynman: Explain S1 — Normal distribution, Binomial, hypothesis testing language",tag:"theory"},
+        {text:"Drill 10 P1 questions against the clock — zero silly mistakes!",tag:"solve"},
+        {text:"Review S1 'critical region' and 'significance level' in mark scheme language",tag:"theory"},
+        {text:"Make S1 hypothesis testing steps flashcard (exact examiner phrasing)",tag:"theory"},
+      ]},
+    ]
+  },
+  { title:"Day 10 — Maths P1 & S1 Papers", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"Maths Paper 1 + S1 · Timed Exposure",
+    groups:[
+      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full P1 paper — timed",tag:"solve"}]},
+      { label:"Afternoon 💛 (2 hrs)", tasks:[
+        {text:"Solve 1 full S1 paper — timed",tag:"solve"},
+        {text:"Autopsy both papers — are you losing marks to careless errors?",tag:"review"},
+      ]},
+      { label:"Evening 🌙 (1 hr)", tasks:[{text:"Redo every question you got wrong today (fresh paper, from memory!)",tag:"solve"}]},
+    ]
+  },
+  { title:"Day 11 — CS P2 & P4 Coding", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"CS Paper 2 (Pseudocode) + Paper 4 (Programming)",
+    groups:[
+      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write pseudocode for a binary search and bubble sort from memory",tag:"theory"}]},
+      { label:"Main Session ✨", tasks:[
+        {text:"Write actual Python/VB code for: file handling, arrays, functions — no notes!",tag:"solve"},
+        {text:"Write pseudocode for: stacks, queues, linked lists",tag:"solve"},
+        {text:"Feynman: Explain recursion with an example (factorial or Fibonacci)",tag:"theory"},
+        {text:"Review P2 algorithm tracing questions from past papers",tag:"solve"},
+      ]},
+    ]
+  },
+  { title:"Day 12 — CS P2 & P4 Papers", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"CS Paper 2 + Paper 4 · Timed Exposure",
+    groups:[
+      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full CS P2 paper — timed",tag:"solve"}]},
+      { label:"Afternoon 💛 (2 hrs)", tasks:[
+        {text:"Solve 1 full CS P4 paper — actually write the code, not just plan it!",tag:"solve"},
+        {text:"Autopsy both papers — collect all examiner keywords into your phrase bank",tag:"review"},
+      ]},
+      { label:"Evening 🌙 (1 hr)", tasks:[{text:"Recode every function/pseudocode question you got wrong",tag:"solve"}]},
+    ]
+  },
+  { title:"Day 13 — Maths S2 Theory", cycle:"c3", cycleLabel:"Cycle 3 · Stat & Finish 🍑", focus:"Maths S2 · Hypothesis Testing & Distributions",
+    groups:[
+      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write everything you know about hypothesis testing (null/alt hypothesis, critical region)",tag:"theory"}]},
+      { label:"Main Session ✨", tasks:[
+        {text:"Feynman: Explain the difference between one-tailed and two-tailed tests",tag:"theory"},
+        {text:"Feynman: Explain Poisson distribution — when to use it and its conditions",tag:"theory"},
+        {text:"Write out exact examiner phrasing for 'conclude in context' questions",tag:"theory"},
+        {text:"Solve 6 hypothesis testing questions from classified papers",tag:"solve"},
+      ]},
+    ]
+  },
+  { title:"Day 14 — Maths S2 Papers", cycle:"c3", cycleLabel:"Cycle 3 · Stat & Finish 🍑", focus:"Maths S2 · Timed Exposure",
+    groups:[
+      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full S2 paper — timed",tag:"solve"}]},
+      { label:"Afternoon 💛 (2 hrs)", tasks:[
+        {text:"Mark & Autopsy — note every 'conclusion in context' mark you missed",tag:"review"},
+        {text:"Solve another S2 paper (back-to-back for pattern recognition!)",tag:"solve"},
+      ]},
+      { label:"Evening 🌙 (1 hr)", tasks:[{text:"Drill the Continuous Random Variable questions (PDF/CDF — often tricky!)",tag:"solve"}]},
+    ]
+  },
+  { title:"Day 15 — Physics P1 MCQ", cycle:"c3", cycleLabel:"Cycle 3 · Stat & Finish 🍑", focus:"Physics Paper 1 · Pattern Spotting",
+    groups:[
+      { label:"Main Session ✨", tasks:[
+        {text:"Solve 2 full P1 MCQ papers back-to-back — strictly timed",tag:"solve"},
+        {text:"Mark and note every question type you keep getting wrong",tag:"review"},
+        {text:"Identify your 3 most common wrong topics — review those only",tag:"review"},
+        {text:"Solve 1 more MCQ paper — target 38+/40! ✨",tag:"solve"},
+      ]},
+    ]
+  },
+  { title:"Day 16 — Physics P1 Blitz", cycle:"c3", cycleLabel:"Cycle 3 · Stat & Finish 🍑", focus:"Physics Paper 1 · Speed & Accuracy",
+    groups:[
+      { label:"Main Session ✨", tasks:[
+        {text:"Solve 2 more P1 MCQ papers — track your score and time each one",tag:"solve"},
+        {text:"Autopsy all 4 MCQ papers from last 2 days — spot the pattern topics",tag:"review"},
+        {text:"Compile a 'tricky MCQ' list — these are your last-minute revision notes 💕",tag:"review"},
+        {text:"Clear any remaining weak topics using classified questions",tag:"solve"},
+      ]},
+    ]
+  },
+  { title:"Day 17 — Full Mock Day 1", cycle:"sprint", cycleLabel:"Final Sprint · Mental Endurance 🌿", focus:"Mock Simulation · Build Exam Stamina",
+    groups:[
+      { label:"Mock Simulation 💪", tasks:[
+        {text:"Solve 1 full Physics paper (any) — exam conditions",tag:"mock"},
+        {text:"Solve 1 full Maths paper (any) — exam conditions",tag:"mock"},
+        {text:"Solve 1 full CS paper (any) — exam conditions",tag:"mock"},
+        {text:"Quick mark all 3 — record scores and note top 3 mistakes per paper",tag:"review"},
+      ]},
+    ]
+  },
+  { title:"Day 18 — Full Mock Day 2", cycle:"sprint", cycleLabel:"Final Sprint · Mental Endurance 🌿", focus:"Mock Simulation · Simulate 5-Hour Sessions",
+    groups:[
+      { label:"Mock Simulation 💪", tasks:[
+        {text:"Solve a paper from the subject you're LEAST confident in",tag:"mock"},
+        {text:"Solve another subject paper back-to-back — no comfort breaks!",tag:"mock"},
+        {text:"Solve a third subject paper to complete the block",tag:"mock"},
+        {text:"Autopsy all 3 — focus only on examiner phrasing fixes",tag:"review"},
+      ]},
+    ]
+  },
+  { title:"Day 19 — Full Mock Day 3", cycle:"sprint", cycleLabel:"Final Sprint · Mental Endurance 🌿", focus:"Mock Simulation · Peak Performance",
+    groups:[
+      { label:"Mock Simulation 💪", tasks:[
+        {text:"Solve papers from all 3 subjects — pick ones you haven't done yet",tag:"mock"},
+        {text:"Mark and review — aim to keep autopsy time under 30 mins per paper",tag:"review"},
+        {text:"Re-read your full examiner phrase bank (CS + Physics) 💕",tag:"tip"},
+      ]},
+    ]
+  },
+  { title:"Day 20 — Final Review 🎀", cycle:"sprint", cycleLabel:"Final Sprint · Mental Endurance 🌿", focus:"Light Review + Mental Reset — you're almost there!",
+    groups:[
+      { label:"Morning — Light Review Only 🌸", tasks:[
+        {text:"Re-read all your formula flashcards (no solving!)",tag:"tip"},
+        {text:"Re-read your examiner phrase bank (CS + Physics)",tag:"tip"},
+        {text:"Review your 'tricky MCQ' list from Day 16",tag:"tip"},
+      ]},
+      { label:"Evening — Rest & Reset 💆‍♀️", tasks:[
+        {text:"No new papers today — your brain needs consolidation time",tag:"tip"},
+        {text:"Prepare your stationery and check exam timetable",tag:"tip"},
+        {text:"Sleep on time — you've done the work. Trust yourself. 🎀✨",tag:"tip"},
+      ]},
+    ]
+  },
+];
+
+const TAG_CLASSES = {theory:'tag-theory',solve:'tag-solve',review:'tag-review',tip:'tag-tip',mock:'tag-mock'};
+const TAG_LABELS  = {theory:'📖 Theory',solve:'✏️ Solve',review:'🩺 Autopsy',tip:'💡 Tip',mock:'🎯 Mock'};
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let currentDay = 0;
+let checks     = {};
+let dayNotes   = {};   // { dayIndex: string }
+
+// Pomodoro state
+const MODES = {
+  work:  { label:'Focus',      minutes:50, color:'#e07898' },
+  short: { label:'Short Break',minutes:10, color:'#3a9080' },
+  long:  { label:'Long Break', minutes:30, color:'#8b5fbf' },
+};
+let pomoMode       = 'work';
+let pomoRunning    = false;
+let pomoSecondsLeft= 50*60;
+let pomoTotalSecs  = 50*60;
+let pomoInterval   = null;
+let pomoSessions   = 0;      // completed focus sessions today
+let pomoDots       = [];     // last 4 session states
+
+// Daily study time (seconds of focus actually elapsed today, per-day stored)
+let dailyStudySecs = {};  // { dayIndex: seconds }
+let bonusEarned    = {};  // { dayIndex: true }  — days where 5h bonus was earned
+
+// ═══════════════════════════════════════════════
+// PERSISTENCE
+// ═══════════════════════════════════════════════
+function loadAll() {
+  try {
+    const s = localStorage.getItem('girlyStudyChecks');   if(s) checks        = JSON.parse(s);
+    const d = localStorage.getItem('girlyDailyTime');     if(d) dailyStudySecs = JSON.parse(d);
+    const b = localStorage.getItem('girlyBonus');         if(b) bonusEarned    = JSON.parse(b);
+    const p = localStorage.getItem('girlyPomoSessions');  if(p) pomoSessions   = parseInt(p)||0;
+    const n = localStorage.getItem('girlyDayNotes');      if(n) dayNotes       = JSON.parse(n);
+  } catch(e) {}
+}
+function saveAll() {
+  try {
+    localStorage.setItem('girlyStudyChecks',  JSON.stringify(checks));
+    localStorage.setItem('girlyDailyTime',    JSON.stringify(dailyStudySecs));
+    localStorage.setItem('girlyBonus',        JSON.stringify(bonusEarned));
+    localStorage.setItem('girlyPomoSessions', pomoSessions);
+    localStorage.setItem('girlyDayNotes',     JSON.stringify(dayNotes));
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════
+// PROGRESS (TASKS)
+// ═══════════════════════════════════════════════
+function key(d,g,t){ return `d${d}_g${g}_t${t}`; }
+function getCheck(d,g,t){ return !!checks[key(d,g,t)]; }
+function setCheck(d,g,t,v){ checks[key(d,g,t)]=v; saveAll(); }
+function totalForDay(i){ return DAYS[i].groups.reduce((s,g)=>s+g.tasks.length,0); }
+function doneForDay(i) { return DAYS[i].groups.reduce((s,g,gi)=>s+g.tasks.filter((_,ti)=>getCheck(i,gi,ti)).length,0); }
+function isDayTaskDone(i){ return doneForDay(i)===totalForDay(i); }
+function totalAll(){ return DAYS.reduce((s,_,i)=>s+totalForDay(i),0); }
+
+// "done" = tasks done + bonus days earned
+function doneAll(){
+  const tasksDone = DAYS.reduce((s,_,i)=>s+doneForDay(i),0);
+  const bonusDone = Object.values(bonusEarned).filter(Boolean).length;
+  return tasksDone + bonusDone;
+}
+function totalAllWithBonus(){
+  return totalAll() + 20; // 20 possible bonus points
+}
+
+function updateProgress(){
+  const total = totalAllWithBonus();
+  const done  = doneAll();
+  const pct   = total ? Math.round((done/total)*100) : 0;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressDone').textContent  = done;
+  document.getElementById('progressTotal').textContent = total;
+  document.getElementById('ringPct').textContent = pct+'%';
+  document.getElementById('ringFill').style.strokeDashoffset = 163.4-(163.4*pct/100);
+}
+
+// ═══════════════════════════════════════════════
+// BONUS PIPS
+// ═══════════════════════════════════════════════
+function renderBonusPips(){
+  const container = document.getElementById('bonusPips');
+  const earned    = Object.values(bonusEarned).filter(Boolean).length;
+  document.getElementById('bonusSub').textContent = `${earned} / 20 days with 5+ hours studied`;
+  container.innerHTML = '';
+  for(let i=0;i<20;i++){
+    const p = document.createElement('div');
+    p.className = 'pip'+(bonusEarned[i]?' earned':'');
+    p.textContent = bonusEarned[i] ? '✦' : (i+1);
+    p.title = `Day ${i+1}`;
+    container.appendChild(p);
+  }
+}
+
+function awardBonus(dayIdx){
+  if(bonusEarned[dayIdx]) return; // already earned
+  bonusEarned[dayIdx] = true;
+  saveAll();
+  renderBonusPips();
+  updateProgress();
+  // show pop
+  document.getElementById('bonusOverlay').classList.add('show');
+  setTimeout(()=>{ document.getElementById('bonusPop').classList.add('show'); }, 50);
+}
+
+function closeBonusPop(){
+  document.getElementById('bonusPop').classList.remove('show');
+  document.getElementById('bonusOverlay').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════
+// POMODORO
+// ═══════════════════════════════════════════════
+function setMode(mode){
+  if(pomoRunning) stopTimer();
+  pomoMode = mode;
+  pomoSecondsLeft = MODES[mode].minutes * 60;
+  pomoTotalSecs   = pomoSecondsLeft;
+  updatePomoUI();
+  updatePomoRing(1);
+  document.getElementById('modeWork').classList.toggle('active', mode==='work');
+  document.getElementById('modeShort').classList.toggle('active', mode==='short');
+  document.getElementById('modeLong').classList.toggle('active', mode==='long');
+  document.getElementById('pomoRingFill').style.stroke = MODES[mode].color;
+}
+
+function toggleTimer(){
+  pomoRunning ? stopTimer() : startTimer();
+}
+function startTimer(){
+  pomoRunning = true;
+  document.getElementById('pomoStartBtn').textContent = '⏸ Pause';
+  pomoInterval = setInterval(tick, 1000);
+}
+function stopTimer(){
+  pomoRunning = false;
+  document.getElementById('pomoStartBtn').textContent = '▶ Start';
+  clearInterval(pomoInterval);
+}
+function resetTimer(){
+  stopTimer();
+  pomoSecondsLeft = MODES[pomoMode].minutes*60;
+  pomoTotalSecs   = pomoSecondsLeft;
+  updatePomoUI();
+  updatePomoRing(1);
+}
+function skipTimer(){
+  stopTimer();
+  onTimerEnd(true);
+}
+
+function tick(){
+  if(pomoSecondsLeft <= 0){ onTimerEnd(false); return; }
+  // Only count down focus time toward daily total
+  if(pomoMode === 'work'){
+    dailyStudySecs[currentDay] = (dailyStudySecs[currentDay]||0) + 1;
+    saveAll();
+    updateDailyBar();
+    checkFiveHourBonus();
+  }
+  pomoSecondsLeft--;
+  updatePomoUI();
+  updatePomoRing(pomoSecondsLeft / pomoTotalSecs);
+}
+
+function onTimerEnd(skipped){
+  stopTimer();
+  if(!skipped && pomoMode==='work'){
+    pomoSessions++;
+    saveAll();
+    updateSessionDots();
+    // auto-switch to break
+    setMode(pomoSessions % 4 === 0 ? 'long' : 'short');
+    // play soft sound
+    playChime();
+  } else {
+    setMode('work');
+  }
+}
+
+function updatePomoUI(){
+  const m = Math.floor(pomoSecondsLeft/60);
+  const s = pomoSecondsLeft % 60;
+  document.getElementById('pomoTime').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('pomoModeLabel').textContent = MODES[pomoMode].label;
+  document.getElementById('pomoSessions').textContent  = pomoSessions;
+}
+
+function updatePomoRing(fraction){
+  const circ = 364.4;
+  document.getElementById('pomoRingFill').style.strokeDashoffset = circ-(circ*fraction);
+}
+
+function updateSessionDots(){
+  const container = document.getElementById('pomoDots');
+  container.innerHTML = '';
+  for(let i=0;i<4;i++){
+    const d = document.createElement('div');
+    const pos = pomoSessions % 4; // position within current cycle of 4
+    if(i < pos) d.className='pomo-dot done';
+    else if(i===pos && pomoRunning && pomoMode==='work') d.className='pomo-dot active';
+    else d.className='pomo-dot';
+    container.appendChild(d);
+  }
+}
+
+function updateDailyBar(){
+  const secs    = dailyStudySecs[currentDay] || 0;
+  const goal    = 5*3600;
+  const pct     = Math.min(100, (secs/goal)*100);
+  const hrs     = Math.floor(secs/3600);
+  const mins    = Math.floor((secs%3600)/60);
+  document.getElementById('dailyFill').style.width = pct+'%';
+  document.getElementById('dailyTimeDisplay').textContent = `${hrs}h ${mins}m`;
+  // Change bar colour when goal hit
+  const bar = document.getElementById('dailyFill');
+  if(secs >= goal){
+    bar.style.background = 'linear-gradient(90deg,#b5ddd4,#3a9080)';
+  } else {
+    bar.style.background = 'linear-gradient(90deg,var(--peach),#f0a050)';
+  }
+}
+
+function checkFiveHourBonus(){
+  const secs = dailyStudySecs[currentDay] || 0;
+  if(secs >= 5*3600 && !bonusEarned[currentDay]){
+    awardBonus(currentDay);
+  }
+}
+
+function playChime(){
+  try {
+    const ctx  = new (window.AudioContext||window.webkitAudioContext)();
+    const freqs = [523.25, 659.25, 783.99]; // C5 E5 G5
+    freqs.forEach((freq,i)=>{
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i*0.18);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime + i*0.18);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + i*0.18 + 0.7);
+      osc.start(ctx.currentTime + i*0.18);
+      osc.stop(ctx.currentTime + i*0.18 + 0.7);
+    });
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════
+// NOTES
+// ═══════════════════════════════════════════════
+let noteSaveTimer = null;
+
+function loadNoteForDay(dayIdx){
+  const ta = document.getElementById('noteTextarea');
+  ta.value = dayNotes[dayIdx] || '';
+  updateNoteFooter();
+}
+
+function updateNoteFooter(){
+  const ta  = document.getElementById('noteTextarea');
+  const len = ta.value.length;
+  document.getElementById('noteCharCount').textContent = `${len} / 1000`;
+}
+
+function onNoteInput(){
+  updateNoteFooter();
+  // debounced auto-save
+  clearTimeout(noteSaveTimer);
+  noteSaveTimer = setTimeout(()=>{
+    dayNotes[currentDay] = document.getElementById('noteTextarea').value;
+    saveAll();
+    // flash saved indicator
+    const ind = document.getElementById('noteSavedIndicator');
+    ind.classList.add('visible');
+    setTimeout(()=>ind.classList.remove('visible'), 1600);
+  }, 600);
+}
+
+function initNoteListeners(){
+  const ta    = document.getElementById('noteTextarea');
+  const clear = document.getElementById('noteClearBtn');
+  ta.addEventListener('input', onNoteInput);
+  clear.addEventListener('click', ()=>{
+    ta.value = '';
+    dayNotes[currentDay] = '';
+    saveAll();
+    updateNoteFooter();
+  });
+}
+
+// ═══════════════════════════════════════════════
+// DAY NAV
+// ═══════════════════════════════════════════════
+function renderNav(){
+  const nav = document.getElementById('dayNav');
+  nav.innerHTML = '';
+  DAYS.forEach((d,i)=>{
+    const btn = document.createElement('button');
+    const tasksDone   = isDayTaskDone(i);
+    const bonusDone   = !!bonusEarned[i];
+    const fullyDone   = tasksDone && bonusDone;
+    btn.className = 'day-tab'+(i===currentDay?' active':'')+(fullyDone?' completed':'');
+    btn.textContent = i+1;
+    btn.title = d.title + (bonusEarned[i]?' ✦ 5h bonus earned!':'');
+    btn.onclick = ()=>{ currentDay=i; renderNav(); renderDay(); updateDailyBar(); updateSessionDots(); loadNoteForDay(i); };
+    nav.appendChild(btn);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// DAY PANEL
+// ═══════════════════════════════════════════════
+function renderDay(){
+  const panel = document.getElementById('dayPanel');
+  const day = DAYS[currentDay];
+  const done = doneForDay(currentDay), total = totalForDay(currentDay);
+  let html = `<div class="day-panel">`;
+  if(done===total){
+    html += `<div class="day-complete-banner visible">🌸 Day ${currentDay+1} tasks done — you're absolutely glowing!</div>`;
+  }
+  html += `<div class="day-header-card">`;
+  html += `<div class="cycle-badge ${day.cycle}"><span class="dot"></span>${day.cycleLabel}</div>`;
+  html += `<div class="day-title">${day.title}</div>`;
+  html += `<div class="day-focus">${day.focus} · ${done}/${total} tasks</div>`;
+  html += `</div><div class="tasks-card">`;
+  day.groups.forEach((grp,gi)=>{
+    html += `<div class="task-group"><div class="task-group-label">${grp.label}</div>`;
+    grp.tasks.forEach((task,ti)=>{
+      const isDone = getCheck(currentDay,gi,ti);
+      html += `<div class="task-item${isDone?' done':''}" data-g="${gi}" data-t="${ti}">
+        <div class="checkbox"><svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+        <div class="task-content">
+          <div class="task-text">${task.text}</div>
+          <span class="task-tag ${TAG_CLASSES[task.tag]}">${TAG_LABELS[task.tag]}</span>
+        </div></div>`;
+    });
+    html += `</div>`;
+  });
+  html += `</div></div>`;
+  panel.innerHTML = html;
+  panel.querySelectorAll('.task-item').forEach(el=>{
+    el.onclick = ()=>{
+      const gi=+el.dataset.g, ti=+el.dataset.t;
+      setCheck(currentDay,gi,ti,!getCheck(currentDay,gi,ti));
+      renderNav(); renderDay(); updateProgress();
+    };
+  });
+}
+
+// ═══════════════════════════════════════════════
+// RESET
+// ═══════════════════════════════════════════════
+document.getElementById('resetBtn').onclick = ()=>{
+  DAYS[currentDay].groups.forEach((g,gi)=>g.tasks.forEach((_,ti)=>setCheck(currentDay,gi,ti,false)));
+  renderNav(); renderDay(); updateProgress();
+};
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+loadAll();
+setMode('work');
+renderNav();
+renderDay();
+renderBonusPips();
+updateProgress();
+updateDailyBar();
+updateSessionDots();
+initNoteListeners();
+loadNoteForDay(0);
+</script>
+</body>
+</html>
