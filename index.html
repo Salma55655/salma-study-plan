@@ -330,6 +330,70 @@
   /* notification bell pulse */
   @keyframes bell-ring { 0%,100%{transform:rotate(0)} 15%{transform:rotate(12deg)} 30%{transform:rotate(-10deg)} 45%{transform:rotate(8deg)} 60%{transform:rotate(-6deg)} 75%{transform:rotate(4deg)} }
   .ring-bell { display:inline-block; animation:bell-ring 0.8s ease; }
+
+  /* ── CUSTOM TASKS ── */
+  .custom-tasks-section { margin-top:18px; }
+  .custom-tasks-header {
+    font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--lilac); margin-bottom:10px; display:flex; align-items:center; gap:8px;
+  }
+  .custom-tasks-header::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--lilac-light),transparent); }
+  .custom-task-item {
+    display:flex; align-items:flex-start; gap:13px; padding:11px 16px; border-radius:14px;
+    border:1.5px solid rgba(212,184,224,0.35); background:var(--lilac-light); margin-bottom:8px;
+    transition:all 0.25s cubic-bezier(0.4,0,0.2,1); user-select:none;
+  }
+  .custom-task-item:hover { border-color:var(--lilac); transform:translateX(4px); }
+  .custom-task-item.done { background:linear-gradient(135deg,#f5eeff,#ede0f8); border-color:rgba(212,184,224,0.7); }
+  .custom-task-item.done .custom-task-text { color:var(--text-soft); text-decoration:line-through; text-decoration-color:var(--lilac); text-decoration-thickness:1.5px; }
+  .custom-checkbox {
+    width:22px; height:22px; border-radius:50%; border:2px solid rgba(212,184,224,0.7);
+    flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center;
+    transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1); background:white; cursor:pointer;
+  }
+  .custom-task-item:hover .custom-checkbox { border-color:var(--lilac); transform:scale(1.1); }
+  .custom-task-item.done .custom-checkbox { background:linear-gradient(135deg,var(--lilac),#a87fd4); border-color:#a87fd4; transform:scale(1.05); box-shadow:0 3px 10px rgba(168,127,212,0.3); }
+  .custom-task-item.done .custom-checkbox svg { opacity:1; transform:scale(1) rotate(0deg); }
+  .custom-checkbox svg { opacity:0; transform:scale(0.3) rotate(-20deg); transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+  .custom-task-text { font-size:13.5px; line-height:1.6; color:var(--text); flex:1; word-break:break-word; }
+  .custom-task-delete {
+    background:none; border:none; cursor:pointer; color:rgba(154,123,136,0.35);
+    font-size:15px; padding:0 2px; line-height:1; transition:color 0.2s; flex-shrink:0; margin-top:2px;
+  }
+  .custom-task-delete:hover { color:#e07898; }
+
+  /* Add task row */
+  .add-task-row {
+    display:flex; gap:8px; align-items:center; margin-top:10px;
+  }
+  .add-task-input {
+    flex:1; padding:10px 14px; border-radius:100px;
+    border:1.5px solid rgba(212,184,224,0.5); background:var(--white);
+    font-family:'Nunito',sans-serif; font-size:13px; color:var(--text);
+    outline:none; transition:all 0.2s;
+    caret-color:var(--lilac);
+  }
+  .add-task-input::placeholder { color:rgba(154,123,136,0.45); font-style:italic; }
+  .add-task-input:focus { border-color:var(--lilac); box-shadow:0 0 0 3px rgba(212,184,224,0.15); }
+  .add-task-btn {
+    padding:10px 18px; border-radius:100px; border:none;
+    background:linear-gradient(135deg,var(--lilac),#a87fd4);
+    color:white; font-family:'Nunito',sans-serif; font-size:12px; font-weight:700;
+    cursor:pointer; transition:all 0.22s; white-space:nowrap;
+    box-shadow:0 4px 14px rgba(168,127,212,0.3);
+  }
+  .add-task-btn:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(168,127,212,0.4); }
+  .add-task-btn:active { transform:translateY(0); }
+
+  /* tab-hidden banner */
+  .tab-hidden-notice {
+    display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    background:linear-gradient(135deg,var(--rose),var(--lilac)); color:white;
+    padding:10px 22px; border-radius:100px; font-size:12px; font-weight:700;
+    box-shadow:0 6px 24px rgba(242,167,187,0.4); z-index:500; letter-spacing:0.05em;
+    animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes slideUp { from{opacity:0;transform:translateX(-50%) translateY(20px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
 </style>
 </head>
 <body>
@@ -348,6 +412,9 @@
   <br>
   <button class="pomo-btn primary" onclick="closeBonusPop()" style="margin:0 auto;display:flex">Yay! ✨</button>
 </div>
+
+<!-- Tab-hidden notice -->
+<div class="tab-hidden-notice" id="tabHiddenNotice">⏱ Timer running in background ✨</div>
 
 <div class="container">
   <header class="header">
@@ -717,6 +784,7 @@ const TAG_LABELS  = {theory:'📖 Theory',solve:'✏️ Solve',review:'🩺 Auto
 let currentDay = 0;
 let checks     = {};
 let dayNotes   = {};   // { dayIndex: string }
+let customTasks= {};   // { dayIndex: [{id, text, done}] }
 
 // Pomodoro state
 const MODES = {
@@ -731,6 +799,7 @@ let pomoTotalSecs  = 50*60;
 let pomoInterval   = null;
 let pomoSessions   = 0;      // completed focus sessions today
 let pomoDots       = [];     // last 4 session states
+let pomoStartTimestamp = null; // for background-tab accuracy
 
 // Daily study time (seconds of focus actually elapsed today, per-day stored)
 let dailyStudySecs = {};  // { dayIndex: seconds }
@@ -746,6 +815,7 @@ function loadAll() {
     const b = localStorage.getItem('girlyBonus');         if(b) bonusEarned    = JSON.parse(b);
     const p = localStorage.getItem('girlyPomoSessions');  if(p) pomoSessions   = parseInt(p)||0;
     const n = localStorage.getItem('girlyDayNotes');      if(n) dayNotes       = JSON.parse(n);
+    const c = localStorage.getItem('girlyCustomTasks');   if(c) customTasks    = JSON.parse(c);
   } catch(e) {}
 }
 function saveAll() {
@@ -755,6 +825,7 @@ function saveAll() {
     localStorage.setItem('girlyBonus',        JSON.stringify(bonusEarned));
     localStorage.setItem('girlyPomoSessions', pomoSessions);
     localStorage.setItem('girlyDayNotes',     JSON.stringify(dayNotes));
+    localStorage.setItem('girlyCustomTasks',  JSON.stringify(customTasks));
   } catch(e) {}
 }
 
@@ -766,17 +837,24 @@ function getCheck(d,g,t){ return !!checks[key(d,g,t)]; }
 function setCheck(d,g,t,v){ checks[key(d,g,t)]=v; saveAll(); }
 function totalForDay(i){ return DAYS[i].groups.reduce((s,g)=>s+g.tasks.length,0); }
 function doneForDay(i) { return DAYS[i].groups.reduce((s,g,gi)=>s+g.tasks.filter((_,ti)=>getCheck(i,gi,ti)).length,0); }
-function isDayTaskDone(i){ return doneForDay(i)===totalForDay(i); }
+function isDayTaskDone(i){
+  const builtIn = doneForDay(i)===totalForDay(i);
+  const custom  = (customTasks[i]||[]);
+  const allCustomDone = custom.length===0 || custom.every(t=>t.done);
+  return builtIn && allCustomDone;
+}
 function totalAll(){ return DAYS.reduce((s,_,i)=>s+totalForDay(i),0); }
 
-// "done" = tasks done + bonus days earned
+// "done" = tasks done + custom tasks done + bonus days earned
 function doneAll(){
-  const tasksDone = DAYS.reduce((s,_,i)=>s+doneForDay(i),0);
-  const bonusDone = Object.values(bonusEarned).filter(Boolean).length;
-  return tasksDone + bonusDone;
+  const tasksDone   = DAYS.reduce((s,_,i)=>s+doneForDay(i),0);
+  const customDone  = Object.values(customTasks).flat().filter(t=>t.done).length;
+  const bonusDone   = Object.values(bonusEarned).filter(Boolean).length;
+  return tasksDone + customDone + bonusDone;
 }
 function totalAllWithBonus(){
-  return totalAll() + 20; // 20 possible bonus points
+  const customTotal = Object.values(customTasks).flat().length;
+  return totalAll() + customTotal + 20; // 20 possible bonus points
 }
 
 function updateProgress(){
@@ -844,11 +922,13 @@ function toggleTimer(){
 }
 function startTimer(){
   pomoRunning = true;
+  pomoStartTimestamp = Date.now();
   document.getElementById('pomoStartBtn').textContent = '⏸ Pause';
   pomoInterval = setInterval(tick, 1000);
 }
 function stopTimer(){
   pomoRunning = false;
+  pomoStartTimestamp = null;
   document.getElementById('pomoStartBtn').textContent = '▶ Start';
   clearInterval(pomoInterval);
 }
@@ -865,18 +945,40 @@ function skipTimer(){
 }
 
 function tick(){
-  if(pomoSecondsLeft <= 0){ onTimerEnd(false); return; }
-  // Only count down focus time toward daily total
-  if(pomoMode === 'work'){
-    dailyStudySecs[currentDay] = (dailyStudySecs[currentDay]||0) + 1;
-    saveAll();
-    updateDailyBar();
-    checkFiveHourBonus();
+  // Use real elapsed time in case tab was hidden
+  const now = Date.now();
+  const realElapsed = pomoStartTimestamp ? Math.floor((now - pomoStartTimestamp) / 1000) : 1;
+  const expectedElapsed = pomoTotalSecs - pomoSecondsLeft + 1;
+  // Catch up if we're behind (tab was hidden)
+  const catchUpSecs = Math.max(1, realElapsed - expectedElapsed + 1);
+
+  for(let i = 0; i < catchUpSecs; i++){
+    if(pomoSecondsLeft <= 0){ onTimerEnd(false); return; }
+    if(pomoMode === 'work'){
+      dailyStudySecs[currentDay] = (dailyStudySecs[currentDay]||0) + 1;
+      checkFiveHourBonus();
+    }
+    pomoSecondsLeft--;
   }
-  pomoSecondsLeft--;
+  saveAll();
+  updateDailyBar();
   updatePomoUI();
   updatePomoRing(pomoSecondsLeft / pomoTotalSecs);
 }
+
+// Page Visibility API — show notice when tab regains focus
+document.addEventListener('visibilitychange', ()=>{
+  const notice = document.getElementById('tabHiddenNotice');
+  if(document.hidden){
+    if(pomoRunning) {
+      notice.style.display = 'block';
+    }
+  } else {
+    notice.style.display = 'none';
+    // If timer was running, force a tick to catch up
+    if(pomoRunning) tick();
+  }
+});
 
 function onTimerEnd(skipped){
   stopTimer();
@@ -959,6 +1061,38 @@ function playChime(){
       osc.stop(ctx.currentTime + i*0.18 + 0.7);
     });
   } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════
+// CUSTOM TASKS
+// ═══════════════════════════════════════════════
+function getCustomTasks(dayIdx){
+  return customTasks[dayIdx] || [];
+}
+
+function addCustomTask(dayIdx, text){
+  if(!text.trim()) return;
+  if(!customTasks[dayIdx]) customTasks[dayIdx] = [];
+  customTasks[dayIdx].push({ id: Date.now()+'', text: text.trim(), done: false });
+  saveAll();
+  updateProgress();
+  renderDay();
+  renderNav();
+}
+
+function toggleCustomTask(dayIdx, id){
+  const tasks = customTasks[dayIdx] || [];
+  const t = tasks.find(t=>t.id===id);
+  if(t){ t.done = !t.done; saveAll(); updateProgress(); renderDay(); renderNav(); }
+}
+
+function deleteCustomTask(dayIdx, id){
+  if(!customTasks[dayIdx]) return;
+  customTasks[dayIdx] = customTasks[dayIdx].filter(t=>t.id!==id);
+  saveAll();
+  updateProgress();
+  renderDay();
+  renderNav();
 }
 
 // ═══════════════════════════════════════════════
@@ -1054,7 +1188,32 @@ function renderDay(){
     });
     html += `</div>`;
   });
-  html += `</div></div>`;
+  html += `</div></div>`; // close tasks-card and day-panel
+
+  // ── Custom tasks section ──
+  const myTasks = getCustomTasks(currentDay);
+  html += `<div class="custom-tasks-section">`;
+  html += `<div class="custom-tasks-header">✦ My tasks for today</div>`;
+  if(myTasks.length > 0){
+    myTasks.forEach(t=>{
+      html += `<div class="custom-task-item${t.done?' done':''}" data-cid="${t.id}">
+        <div class="custom-checkbox" data-action="toggle" data-cid="${t.id}">
+          <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+            <path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="custom-task-text">${t.text}</span>
+        <button class="custom-task-delete" data-action="delete" data-cid="${t.id}" title="Remove task">✕</button>
+      </div>`;
+    });
+  }
+  html += `<div class="add-task-row">
+    <input class="add-task-input" id="addTaskInput" type="text" maxlength="200"
+      placeholder="add your own task… 🌸" />
+    <button class="add-task-btn" id="addTaskBtn">+ Add</button>
+  </div>`;
+  html += `</div>`;
+
   panel.innerHTML = html;
   panel.querySelectorAll('.task-item').forEach(el=>{
     el.onclick = ()=>{
@@ -1063,6 +1222,25 @@ function renderDay(){
       renderNav(); renderDay(); updateProgress();
     };
   });
+
+  // Custom task interactions
+  panel.querySelectorAll('[data-action="toggle"]').forEach(el=>{
+    el.onclick = (e)=>{ e.stopPropagation(); toggleCustomTask(currentDay, el.dataset.cid); };
+  });
+  panel.querySelectorAll('[data-action="delete"]').forEach(el=>{
+    el.onclick = (e)=>{ e.stopPropagation(); deleteCustomTask(currentDay, el.dataset.cid); };
+  });
+  panel.querySelectorAll('.custom-task-item').forEach(el=>{
+    el.onclick = ()=>{ toggleCustomTask(currentDay, el.dataset.cid); };
+  });
+
+  // Add task button + enter key
+  const addBtn   = document.getElementById('addTaskBtn');
+  const addInput = document.getElementById('addTaskInput');
+  if(addBtn && addInput){
+    addBtn.onclick = ()=>{ addCustomTask(currentDay, addInput.value); };
+    addInput.addEventListener('keydown', e=>{ if(e.key==='Enter') addCustomTask(currentDay, addInput.value); });
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -1070,6 +1248,9 @@ function renderDay(){
 // ═══════════════════════════════════════════════
 document.getElementById('resetBtn').onclick = ()=>{
   DAYS[currentDay].groups.forEach((g,gi)=>g.tasks.forEach((_,ti)=>setCheck(currentDay,gi,ti,false)));
+  // Also uncheck custom tasks (but keep them)
+  if(customTasks[currentDay]) customTasks[currentDay].forEach(t=>t.done=false);
+  saveAll();
   renderNav(); renderDay(); updateProgress();
 };
 
