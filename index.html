@@ -243,9 +243,42 @@
   .task-item.done .checkbox { background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-color:var(--rose-deep); transform:scale(1.05); box-shadow:0 3px 10px rgba(224,120,152,0.3); }
   .checkbox svg { opacity:0; transform:scale(0.3) rotate(-20deg); transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1); }
   .task-item.done .checkbox svg { opacity:1; transform:scale(1) rotate(0deg); }
-  .task-content { flex:1; }
+  .task-content { flex:1; min-width:0; }
   .task-text { font-size:13.5px; line-height:1.6; color:var(--text); font-weight:400; transition:all 0.2s; }
   .task-tag { display:inline-flex; align-items:center; gap:4px; margin-top:6px; padding:3px 9px; border-radius:100px; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+  .task-delete-btn {
+    background:none; border:none; cursor:pointer; color:rgba(154,123,136,0.25);
+    font-size:14px; padding:0 2px; line-height:1; transition:all 0.2s; flex-shrink:0;
+    margin-top:2px; opacity:0;
+  }
+  .task-item:hover .task-delete-btn { opacity:1; color:rgba(154,123,136,0.5); }
+  .task-delete-btn:hover { color:#e07898 !important; transform:scale(1.2); }
+
+  /* Restore deleted tasks */
+  .restore-section {
+    margin-top:10px; padding:12px 16px; border-radius:14px;
+    border:1.5px dashed rgba(242,167,187,0.35); background:rgba(253,228,237,0.3);
+  }
+  .restore-header {
+    font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--rose); margin-bottom:8px; display:flex; align-items:center; gap:6px; cursor:pointer;
+  }
+  .restore-header .restore-arrow { transition:transform 0.2s; font-style:normal; }
+  .restore-header.open .restore-arrow { transform:rotate(180deg); }
+  .restore-list { display:none; }
+  .restore-list.open { display:block; }
+  .restore-item {
+    display:flex; align-items:center; gap:10px; padding:7px 10px; border-radius:10px;
+    font-size:12.5px; color:var(--text-soft); margin-bottom:5px;
+    background:white; border:1px solid rgba(242,167,187,0.25);
+  }
+  .restore-item-text { flex:1; text-decoration:line-through; text-decoration-color:rgba(242,167,187,0.5); font-style:italic; }
+  .restore-btn {
+    background:none; border:1.5px solid rgba(242,167,187,0.5); color:var(--rose-deep);
+    border-radius:100px; padding:3px 10px; font-size:10px; font-weight:700;
+    font-family:'Nunito',sans-serif; cursor:pointer; transition:all 0.2s; white-space:nowrap;
+  }
+  .restore-btn:hover { background:var(--rose-light); border-color:var(--rose-deep); }
   .tag-theory { background:var(--lilac-light); color:#8b5fbf; }
   .tag-solve  { background:var(--rose-light);  color:var(--rose-deep); }
   .tag-review { background:var(--peach-light); color:#c97c30; }
@@ -418,10 +451,10 @@
 
 <div class="container">
   <header class="header">
-    <div class="header-ribbon">✦ Hybrid Spike Strategy ✦</div>
-    <h1>My <em>20-Day</em> Study Plan<span class="cursive">you've got this 🎀</span></h1>
+    <div class="header-ribbon">✦ 14-Day Grind Plan ✦</div>
+    <h1>My <em>14-Day</em> Study Plan<span class="cursive">let's grind 🔥</span></h1>
     <div class="header-divider">✿</div>
-    <p class="header-sub">Active recall → Timed exposure → Autopsy. One beautiful day at a time, no panic — just process and progress.</p>
+    <p class="header-sub">Physics playlists · Maths P1/P3/S1/S2 papers · CS P1–P4 papers. Brain-optimised. Spaced. Strategic.</p>
   </header>
 
   <!-- Overall progress -->
@@ -448,8 +481,8 @@
   <div class="bonus-badge">
     <div class="bonus-icon">⏱️</div>
     <div class="bonus-info">
-      <div class="bonus-title">5-Hour Hustle Bonus 🎀 — each day you hit 5h gets a ✦ star</div>
-      <div class="bonus-sub" id="bonusSub">0 / 20 days with 5+ hours studied</div>
+      <div class="bonus-title">6-Hour Grind Bonus 🎀 — each day you hit 6h gets a ✦ star</div>
+      <div class="bonus-sub" id="bonusSub">0 / 14 days with 6+ hours studied</div>
     </div>
     <div class="bonus-pips" id="bonusPips"></div>
   </div>
@@ -489,7 +522,7 @@
           <div class="pomo-daily-bar-track">
             <div class="pomo-daily-bar-fill" id="dailyFill"></div>
           </div>
-          <div class="pomo-daily-stat"><strong id="dailyTimeDisplay">0h 0m</strong> / 5h goal</div>
+          <div class="pomo-daily-stat"><strong id="dailyTimeDisplay">0h 0m</strong> / 6h goal</div>
         </div>
         <div class="pomo-btn-row">
           <button class="pomo-btn primary" id="pomoStartBtn" onclick="toggleTimer()">▶ Start</button>
@@ -544,232 +577,260 @@
 // DATA
 // ═══════════════════════════════════════════════
 const DAYS = [
-  { title:"Day 1 — Physics P4 Theory", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"Physics Paper 4 · Active Recall Revision",
+  // ─── DAY 1 ───
+  { title:"Day 1 — Physics P1 Videos", cycle:"c1", cycleLabel:"Week 1 · Physics First 🔬", focus:"CIE Physics Paper 1 · Full playlist watch + active notes · ~6h",
     groups:[
-      { label:"Warm-up 🌤", tasks:[
-        {text:"Review the P4 syllabus — highlight every topic you feel shaky on",tag:"theory"},
-        {text:"Blurt Method: Pick 2 topics (e.g. Gravitational Fields, Capacitance) — write everything you remember on blank paper first",tag:"theory"},
+      { label:"Block 1 — Morning 🌤 (2.5h)", tasks:[
+        {text:"Watch Physics P1 playlist — first half (videos 1 to ~12). Pause after each video, write 3 bullet points from memory before continuing",tag:"theory"},
+        {text:"Mark any video you don't fully understand with a ★ in your notes — you'll return to these",tag:"tip"},
       ]},
-      { label:"Main Session ✨ (7:30 PM – 1:00 AM)", tasks:[
-        {text:"Feynman Technique: Explain Capacitance charging/discharging out loud like you're teaching a 10-year-old",tag:"theory"},
-        {text:"Feynman Technique: Explain Magnetic Flux & Faraday's Law",tag:"theory"},
-        {text:"Fill in your Blurt gaps using a different colour pen",tag:"theory"},
-        {text:"Summarise Thermal Physics key equations on a flashcard",tag:"theory"},
-        {text:"Make a 1-page formula sheet for P4 (no peeking while solving tomorrow!)",tag:"theory"},
+      { label:"Block 2 — Afternoon ✨ (2.5h)", tasks:[
+        {text:"Watch Physics P1 playlist — second half (remaining videos). Same active-pause method",tag:"theory"},
+        {text:"Write a 1-page 'P1 Brain Dump' — everything you remember about the topics covered today, no notes allowed",tag:"theory"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Re-read only your ★ flagged notes from today. Don't re-watch — just read and visualise",tag:"tip"},
+        {text:"Write 3 things: what felt solid, what felt shaky, what you'll attack tomorrow",tag:"tip"},
       ]},
     ]
   },
-  { title:"Day 2 — Physics P4 Papers", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"Physics Paper 4 · Timed Exposure & Autopsy",
+  // ─── DAY 2 ───
+  { title:"Day 2 — CS Paper 1 Blitz", cycle:"c1", cycleLabel:"Week 1 · Physics First 🔬", focus:"CS 9618 Paper 1 · 5 past papers + mark scheme autopsy · ~6.5h",
     groups:[
-      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full P4 yearly paper under exam conditions — no phone, strictly timed",tag:"solve"}]},
-      { label:"Afternoon 💛 (2 hrs)", tasks:[
-        {text:"Mark your paper with the official mark scheme",tag:"review"},
-        {text:"Highlight every keyword the examiner wanted — write them in your notebook",tag:"review"},
-        {text:"List all topics you dropped marks on",tag:"review"},
+      { label:"Block 1 — Morning 🌤 (3h)", tasks:[
+        {text:"Do CS P1: 9618/11_Summer_2024 — timed, 1h15m, no notes",tag:"solve"},
+        {text:"Autopsy immediately — mark with mark scheme, write every phrase you missed into a 'CS Phrase Bank' doc",tag:"review"},
+        {text:"Do CS P1: 9618/12_Summer_2024 — timed, 1h15m",tag:"solve"},
       ]},
-      { label:"Evening 🌙 (1 hr)", tasks:[
-        {text:"Solve classified questions ONLY on the weak topics you identified this afternoon",tag:"solve"},
-        {text:"Solve a second past paper if time allows (mark it quickly!)",tag:"solve"},
+      { label:"Block 2 — Afternoon 💛 (3h)", tasks:[
+        {text:"Autopsy 9618/12_Summer_2024 — add new phrases to Phrase Bank",tag:"review"},
+        {text:"Do CS P1: 9618/13_Summer_2024 — timed",tag:"solve"},
+        {text:"Autopsy 9618/13_Summer_2024",tag:"review"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Re-read your full CS Phrase Bank — read it like a story, not a list",tag:"tip"},
       ]},
     ]
   },
-  { title:"Day 3 — Maths P3 Theory", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"Maths Paper 3 · Integration, Vectors & Complex Numbers",
+  // ─── DAY 3 ───
+  { title:"Day 3 — Maths P1 Papers", cycle:"c1", cycleLabel:"Week 1 · Physics First 🔬", focus:"CIE Maths Paper 1 · 4 past papers · ~6h",
     groups:[
-      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write all Integration techniques you remember (by parts, partial fractions, substitution)",tag:"theory"}]},
-      { label:"Main Session ✨", tasks:[
-        {text:"Feynman: Explain Complex Numbers (modulus-argument form, loci) out loud",tag:"theory"},
-        {text:"Feynman: Explain Vectors (line equations, planes, intersections)",tag:"theory"},
-        {text:"Practice 5 integration questions from your notes without looking at worked solutions",tag:"solve"},
-        {text:"Fill gaps in your Blurt notes — different colour pen",tag:"theory"},
-        {text:"Make a formula flashcard: Differential Equations + Vectors",tag:"theory"},
+      { label:"Block 1 — Morning 🌤 (3h)", tasks:[
+        {text:"Do Maths P1: 9709/11_M/J/24 — timed, 1h15m",tag:"solve"},
+        {text:"Mark with worked solutions — circle every mark you lost. Categorise: silly error / didn't know method / time ran out",tag:"review"},
+        {text:"Do Maths P1: 9709/12_M/J/24 — timed",tag:"solve"},
+      ]},
+      { label:"Block 2 — Afternoon 💛 (3h)", tasks:[
+        {text:"Mark 9709/12_M/J/24 — same categorisation",tag:"review"},
+        {text:"Do Maths P1: 9709/13_M/J/24 — timed",tag:"solve"},
+        {text:"Mark and identify your 2 weakest P1 topics from today's papers",tag:"review"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Do 5 targeted questions from your 2 weakest P1 topics only — don't do more",tag:"solve"},
       ]},
     ]
   },
-  { title:"Day 4 — Maths P3 Papers", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"Maths Paper 3 · Timed Exposure & Autopsy",
+  // ─── DAY 4 ───
+  { title:"Day 4 — Physics P2 Videos", cycle:"c1", cycleLabel:"Week 1 · Physics First 🔬", focus:"CIE Physics Paper 2 · Full playlist + notes · ~6h",
     groups:[
-      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full P3 yearly paper — strictly timed, no formula sheet",tag:"solve"}]},
-      { label:"Afternoon 💛 (2 hrs)", tasks:[
-        {text:"Mark with mark scheme — note every method mark you missed",tag:"review"},
-        {text:"Identify your 3 weakest P3 topics from this paper",tag:"review"},
+      { label:"Block 1 — Morning 🌤 (2.5h)", tasks:[
+        {text:"Watch Physics P2 playlist — first half. Active-pause method: pause after each video, write 3 bullet points from memory",tag:"theory"},
+        {text:"Link new P2 topics to P1 topics where relevant — write connections in margin",tag:"tip"},
       ]},
-      { label:"Evening 🌙 (1 hr)", tasks:[
-        {text:"Classified questions on the 3 weak topics only",tag:"solve"},
-        {text:"Attempt a second P3 paper (mark and record your score!)",tag:"solve"},
+      { label:"Block 2 — Afternoon ✨ (2.5h)", tasks:[
+        {text:"Watch Physics P2 playlist — second half. Active-pause method",tag:"theory"},
+        {text:"P2 Brain Dump: write everything you remember about today's topics, no notes, 15 min timer",tag:"theory"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Review your P1 Brain Dump from Day 1 — what do you remember now vs then? Fill in gaps",tag:"theory"},
       ]},
     ]
   },
-  { title:"Day 5 — CS P3 Theory", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"CS Paper 3 · Advanced Theory",
+  // ─── DAY 5 ───
+  { title:"Day 5 — CS Paper 2 + Maths P3 Start", cycle:"c2", cycleLabel:"Week 1 · Momentum 💜", focus:"CS P2 papers + first Maths P3 · ~6.5h",
     groups:[
-      { label:"Warm-up 🌤", tasks:[
-        {text:"Blurt: Write everything you know about Normalisation (1NF, 2NF, 3NF)",tag:"theory"},
-        {text:"Blurt: Write everything you know about TCP/IP layers and protocols",tag:"theory"},
+      { label:"Block 1 — CS Morning 🌤 (3h)", tasks:[
+        {text:"Do CS P2: 9618/21_Summer_2024 — timed",tag:"solve"},
+        {text:"Autopsy — add to CS Phrase Bank. P2 needs pseudocode precision — note exact syntax the mark scheme uses",tag:"review"},
+        {text:"Do CS P2: 9618/22_Summer_2024 — timed",tag:"solve"},
+        {text:"Autopsy 9618/22_Summer_2024",tag:"review"},
       ]},
-      { label:"Main Session ✨", tasks:[
-        {text:"Feynman: Explain Database Transactions (ACID properties) out loud",tag:"theory"},
-        {text:"Feynman: Explain Encryption methods (symmetric vs asymmetric)",tag:"theory"},
-        {text:"Feynman: Explain OOP concepts — polymorphism, inheritance, encapsulation",tag:"theory"},
-        {text:"Write 10 examiner-style keywords for P3 from past mark schemes",tag:"theory"},
-        {text:"Fill in gaps with notes — different colour pen!",tag:"theory"},
+      { label:"Block 2 — Maths P3 Afternoon 💛 (3h)", tasks:[
+        {text:"Do Maths P3: 9709/31_M/J/24 — timed, 1h15m",tag:"solve"},
+        {text:"Mark with worked solutions — P3 is hard, so for every question you got wrong, re-do it from scratch without looking at the solution",tag:"review"},
+        {text:"Do Maths P3: 9709/32_M/J/24 — timed",tag:"solve"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Mark 9709/32_M/J/24 quickly, note your biggest P3 struggle topic",tag:"review"},
       ]},
     ]
   },
-  { title:"Day 6 — CS P3 Papers", cycle:"c1", cycleLabel:"Cycle 1 · Heavy Hitters 🔥", focus:"CS Paper 3 · Timed Exposure & Autopsy",
+  // ─── DAY 6 ───
+  { title:"Day 6 — Physics P3 Videos", cycle:"c2", cycleLabel:"Week 1 · Momentum 💜", focus:"CIE Physics Paper 3 · Full playlist + planning skills · ~6h",
     groups:[
-      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full CS P3 paper — timed, no notes",tag:"solve"}]},
-      { label:"Afternoon 💛 (2 hrs)", tasks:[
-        {text:"Mark with mark scheme — circle every exact phrase the examiner wanted",tag:"review"},
-        {text:"Write out the exact examiner phrases in a 'phrase bank' notebook",tag:"review"},
+      { label:"Block 1 — Morning 🌤 (2.5h)", tasks:[
+        {text:"Watch Physics P3 playlist — first half. P3 is practical-based: for each experiment, write the independent variable, dependent variable, and 2 controls",tag:"theory"},
+        {text:"Note every 'sources of error' phrase used in the videos — these are your mark scheme gold",tag:"theory"},
       ]},
-      { label:"Evening 🌙 (1 hr)", tasks:[
-        {text:"Classified questions on weak P3 topics",tag:"solve"},
-        {text:"Attempt a second CS P3 paper",tag:"solve"},
+      { label:"Block 2 — Afternoon ✨ (2.5h)", tasks:[
+        {text:"Watch Physics P3 playlist — second half. Focus on data analysis and graph-drawing technique",tag:"theory"},
+        {text:"P3 Brain Dump: write all experiment methods, error sources, and analysis techniques you remember — 15 min, no notes",tag:"theory"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Re-read P2 Brain Dump from Day 4. Quiz yourself: cover the answers, recite out loud",tag:"theory"},
       ]},
     ]
   },
-  { title:"Day 7 — Physics P2 & P5", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"Physics Paper 2 + Paper 5 · Mechanics & Practical Skills",
+  // ─── DAY 7 ───
+  { title:"Day 7 — Maths S1 Papers + CS P3", cycle:"c2", cycleLabel:"Week 1 · Momentum 💜", focus:"Maths S1 papers + CS Paper 3 start · ~6.5h",
     groups:[
-      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write all Mechanics equations (SUVAT, moments, circular motion)",tag:"theory"}]},
-      { label:"Main Session ✨", tasks:[
-        {text:"Feynman: Explain P5 planning-an-experiment questions (variables, controls, method)",tag:"theory"},
-        {text:"Practice 3 P5 'design an experiment' questions from past papers",tag:"solve"},
-        {text:"Review P2 waves + superposition notes",tag:"theory"},
-        {text:"Make formula flashcard for P2 key equations",tag:"theory"},
+      { label:"Block 1 — Maths S1 Morning 🌤 (3h)", tasks:[
+        {text:"Do Maths S1: 9709/51_M/J/24 — timed",tag:"solve"},
+        {text:"Mark — S1 mark schemes are very specific about hypothesis test conclusions. Write the exact phrasing into a 'Stats Phrase Bank'",tag:"review"},
+        {text:"Do Maths S1: 9709/52_M/J/24 — timed",tag:"solve"},
+        {text:"Mark and add to Stats Phrase Bank",tag:"review"},
+      ]},
+      { label:"Block 2 — CS P3 Afternoon 💛 (3h)", tasks:[
+        {text:"Do CS P3: 9618/31_Summer_2024 — timed (this is the written algorithms paper — think carefully before writing)",tag:"solve"},
+        {text:"Autopsy — P3 needs logical precision. For every wrong answer, trace through the correct algorithm step by step",tag:"review"},
+        {text:"Do CS P3: 9618/32_Summer_2024 — timed",tag:"solve"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Week 1 reflection: score your confidence in each paper 1–5. Write which 2 papers scare you most",tag:"tip"},
       ]},
     ]
   },
-  { title:"Day 8 — Physics P2 & P5 Papers", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"Physics Paper 2 + Paper 5 · Timed Exposure",
+  // ─── DAY 8 ───
+  { title:"Day 8 — Physics Papers (P1 + P2)", cycle:"c3", cycleLabel:"Week 2 · Papers Mode 🎯", focus:"Physics past papers under exam conditions · ~6.5h",
     groups:[
-      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full P2 yearly paper — timed",tag:"solve"}]},
-      { label:"Afternoon 💛 (2 hrs)", tasks:[
-        {text:"Solve 1 full P5 yearly paper — timed",tag:"solve"},
-        {text:"Mark both papers and do The Autopsy 🩺",tag:"review"},
+      { label:"Block 1 — Morning 🌤 (3h)", tasks:[
+        {text:"Do Physics P1 MCQ paper (use a recent one from your collection) — strictly timed, 1h15m",tag:"mock"},
+        {text:"Mark and categorise each wrong answer: topic, type of error. Build a 'Physics Weak Topics' list",tag:"review"},
+        {text:"Do Physics P2 paper — timed, 1h15m",tag:"mock"},
       ]},
-      { label:"Evening 🌙 (1 hr)", tasks:[{text:"Classified questions on weak P2/P5 areas",tag:"solve"}]},
-    ]
-  },
-  { title:"Day 9 — Maths P1 & S1 Theory", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"Maths Paper 1 + S1 · Speed & Easy Marks",
-    groups:[
-      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write all P1 formulas — binomial, series, differentiation rules",tag:"theory"}]},
-      { label:"Main Session ✨", tasks:[
-        {text:"Feynman: Explain S1 — Normal distribution, Binomial, hypothesis testing language",tag:"theory"},
-        {text:"Drill 10 P1 questions against the clock — zero silly mistakes!",tag:"solve"},
-        {text:"Review S1 'critical region' and 'significance level' in mark scheme language",tag:"theory"},
-        {text:"Make S1 hypothesis testing steps flashcard (exact examiner phrasing)",tag:"theory"},
+      { label:"Block 2 — Afternoon 💛 (3h)", tasks:[
+        {text:"Mark Physics P2 — same categorisation",tag:"review"},
+        {text:"Go back to your Physics P2 video notes from Day 4 — re-read only the topics you got wrong today",tag:"theory"},
+        {text:"Do 10 targeted Physics P2 classified questions on your 2 weakest topics",tag:"solve"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Re-read CS Phrase Bank from Day 2 — read it out loud, add anything new",tag:"tip"},
       ]},
     ]
   },
-  { title:"Day 10 — Maths P1 & S1 Papers", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"Maths Paper 1 + S1 · Timed Exposure",
+  // ─── DAY 9 ───
+  { title:"Day 9 — Maths P3 Deep Dive", cycle:"c3", cycleLabel:"Week 2 · Papers Mode 🎯", focus:"Maths P3 · 4 papers from different years · ~6.5h",
     groups:[
-      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full P1 paper — timed",tag:"solve"}]},
-      { label:"Afternoon 💛 (2 hrs)", tasks:[
-        {text:"Solve 1 full S1 paper — timed",tag:"solve"},
-        {text:"Autopsy both papers — are you losing marks to careless errors?",tag:"review"},
+      { label:"Block 1 — Morning 🌤 (3h)", tasks:[
+        {text:"Do Maths P3: 9709/33_M/J/24 — timed",tag:"solve"},
+        {text:"Mark — P3 requires method marks. For every question, check: did you show all steps clearly?",tag:"review"},
+        {text:"Do Maths P3: 9709/31_O/N/23 — timed",tag:"solve"},
       ]},
-      { label:"Evening 🌙 (1 hr)", tasks:[{text:"Redo every question you got wrong today (fresh paper, from memory!)",tag:"solve"}]},
-    ]
-  },
-  { title:"Day 11 — CS P2 & P4 Coding", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"CS Paper 2 (Pseudocode) + Paper 4 (Programming)",
-    groups:[
-      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write pseudocode for a binary search and bubble sort from memory",tag:"theory"}]},
-      { label:"Main Session ✨", tasks:[
-        {text:"Write actual Python/VB code for: file handling, arrays, functions — no notes!",tag:"solve"},
-        {text:"Write pseudocode for: stacks, queues, linked lists",tag:"solve"},
-        {text:"Feynman: Explain recursion with an example (factorial or Fibonacci)",tag:"theory"},
-        {text:"Review P2 algorithm tracing questions from past papers",tag:"solve"},
+      { label:"Block 2 — Afternoon 💛 (3h)", tasks:[
+        {text:"Mark 9709/31_O/N/23",tag:"review"},
+        {text:"Do Maths P3: 9709/32_O/N/23 — timed",tag:"solve"},
+        {text:"Mark and compile your 'P3 Weak Topics' — which topics cost you most marks across all P3 papers so far?",tag:"review"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Do 5 questions from your #1 weakest P3 topic — use worked solutions if you're completely stuck, but try first",tag:"solve"},
       ]},
     ]
   },
-  { title:"Day 12 — CS P2 & P4 Papers", cycle:"c2", cycleLabel:"Cycle 2 · Speed & Logic 💜", focus:"CS Paper 2 + Paper 4 · Timed Exposure",
+  // ─── DAY 10 ───
+  { title:"Day 10 — CS Paper 4 + Physics P3 Paper", cycle:"c3", cycleLabel:"Week 2 · Papers Mode 🎯", focus:"CS P4 programming + Physics P3 practical · ~6.5h",
     groups:[
-      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full CS P2 paper — timed",tag:"solve"}]},
-      { label:"Afternoon 💛 (2 hrs)", tasks:[
-        {text:"Solve 1 full CS P4 paper — actually write the code, not just plan it!",tag:"solve"},
-        {text:"Autopsy both papers — collect all examiner keywords into your phrase bank",tag:"review"},
+      { label:"Block 1 — CS P4 Morning 🌤 (3h)", tasks:[
+        {text:"Do CS P4: 9618/41_Summer_2024 — timed. P4 is programming — actually write code, don't plan in your head",tag:"solve"},
+        {text:"Autopsy — compare your code logic to the mark scheme. Note every syntax/logic issue into a 'P4 Code Bank'",tag:"review"},
+        {text:"Do CS P4: 9618/42_Summer_2024 — timed",tag:"solve"},
       ]},
-      { label:"Evening 🌙 (1 hr)", tasks:[{text:"Recode every function/pseudocode question you got wrong",tag:"solve"}]},
-    ]
-  },
-  { title:"Day 13 — Maths S2 Theory", cycle:"c3", cycleLabel:"Cycle 3 · Stat & Finish 🍑", focus:"Maths S2 · Hypothesis Testing & Distributions",
-    groups:[
-      { label:"Warm-up 🌤", tasks:[{text:"Blurt: Write everything you know about hypothesis testing (null/alt hypothesis, critical region)",tag:"theory"}]},
-      { label:"Main Session ✨", tasks:[
-        {text:"Feynman: Explain the difference between one-tailed and two-tailed tests",tag:"theory"},
-        {text:"Feynman: Explain Poisson distribution — when to use it and its conditions",tag:"theory"},
-        {text:"Write out exact examiner phrasing for 'conclude in context' questions",tag:"theory"},
-        {text:"Solve 6 hypothesis testing questions from classified papers",tag:"solve"},
+      { label:"Block 2 — Physics P3 Afternoon 💛 (3h)", tasks:[
+        {text:"Do Physics P3 past paper — timed, 1h. Focus on planning section: write your method before touching any calculations",tag:"mock"},
+        {text:"Mark with mark scheme — P3 marking is generous if you use the right keywords. Count how many key phrases you hit",tag:"review"},
+        {text:"Re-read your P3 Brain Dump from Day 6 — add any new phrases from today's mark scheme",tag:"theory"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Re-read Stats Phrase Bank from Day 7 — test yourself by covering answers",tag:"tip"},
       ]},
     ]
   },
-  { title:"Day 14 — Maths S2 Papers", cycle:"c3", cycleLabel:"Cycle 3 · Stat & Finish 🍑", focus:"Maths S2 · Timed Exposure",
+  // ─── DAY 11 ───
+  { title:"Day 11 — Maths S2 Playlist + S1 Papers", cycle:"c3", cycleLabel:"Week 2 · Papers Mode 🎯", focus:"S2 video series + 2 more S1 papers · ~6.5h",
     groups:[
-      { label:"Morning 🌸 (2 hrs)", tasks:[{text:"Solve 1 full S2 paper — timed",tag:"solve"}]},
-      { label:"Afternoon 💛 (2 hrs)", tasks:[
-        {text:"Mark & Autopsy — note every 'conclusion in context' mark you missed",tag:"review"},
-        {text:"Solve another S2 paper (back-to-back for pattern recognition!)",tag:"solve"},
+      { label:"Block 1 — S2 Videos Morning 🌤 (3h)", tasks:[
+        {text:"Watch S2 playlist (https://youtube.com/playlist?list=PLNCk3eencMIcTuAKC1ybwykKatir6SmBe) — first half. Active-pause method",tag:"theory"},
+        {text:"Focus on: Poisson distribution, Continuous Random Variables, hypothesis testing with new distributions",tag:"theory"},
+        {text:"Watch S2 playlist — second half",tag:"theory"},
       ]},
-      { label:"Evening 🌙 (1 hr)", tasks:[{text:"Drill the Continuous Random Variable questions (PDF/CDF — often tricky!)",tag:"solve"}]},
-    ]
-  },
-  { title:"Day 15 — Physics P1 MCQ", cycle:"c3", cycleLabel:"Cycle 3 · Stat & Finish 🍑", focus:"Physics Paper 1 · Pattern Spotting",
-    groups:[
-      { label:"Main Session ✨", tasks:[
-        {text:"Solve 2 full P1 MCQ papers back-to-back — strictly timed",tag:"solve"},
-        {text:"Mark and note every question type you keep getting wrong",tag:"review"},
-        {text:"Identify your 3 most common wrong topics — review those only",tag:"review"},
-        {text:"Solve 1 more MCQ paper — target 38+/40! ✨",tag:"solve"},
+      { label:"Block 2 — Maths Papers Afternoon 💛 (3h)", tasks:[
+        {text:"Do Maths S1: 9709/53_M/J/24 — timed",tag:"solve"},
+        {text:"Mark and add to Stats Phrase Bank",tag:"review"},
+        {text:"Do Maths P1: 9709/11_O/N/23 — timed",tag:"solve"},
+        {text:"Mark — focus on whether silly errors are decreasing compared to Day 3",tag:"review"},
       ]},
-    ]
-  },
-  { title:"Day 16 — Physics P1 Blitz", cycle:"c3", cycleLabel:"Cycle 3 · Stat & Finish 🍑", focus:"Physics Paper 1 · Speed & Accuracy",
-    groups:[
-      { label:"Main Session ✨", tasks:[
-        {text:"Solve 2 more P1 MCQ papers — track your score and time each one",tag:"solve"},
-        {text:"Autopsy all 4 MCQ papers from last 2 days — spot the pattern topics",tag:"review"},
-        {text:"Compile a 'tricky MCQ' list — these are your last-minute revision notes 💕",tag:"review"},
-        {text:"Clear any remaining weak topics using classified questions",tag:"solve"},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"S2 Brain Dump: write all S2 distributions and their conditions from memory",tag:"theory"},
       ]},
     ]
   },
-  { title:"Day 17 — Full Mock Day 1", cycle:"sprint", cycleLabel:"Final Sprint · Mental Endurance 🌿", focus:"Mock Simulation · Build Exam Stamina",
+  // ─── DAY 12 ───
+  { title:"Day 12 — CS Full Paper Sprint", cycle:"c4", cycleLabel:"Week 2 · Final Push 🌿", focus:"CS Papers 1+2+3+4 one more round · ~6.5h",
     groups:[
-      { label:"Mock Simulation 💪", tasks:[
-        {text:"Solve 1 full Physics paper (any) — exam conditions",tag:"mock"},
-        {text:"Solve 1 full Maths paper (any) — exam conditions",tag:"mock"},
-        {text:"Solve 1 full CS paper (any) — exam conditions",tag:"mock"},
-        {text:"Quick mark all 3 — record scores and note top 3 mistakes per paper",tag:"review"},
+      { label:"Block 1 — Morning 🌤 (3h)", tasks:[
+        {text:"Do CS P1: 9618/11_Winter_2024 — timed",tag:"solve"},
+        {text:"Autopsy — is your Phrase Bank paying off? Count how many marks you got from phrases you wrote down",tag:"review"},
+        {text:"Do CS P2: 9618/21_Winter_2024 — timed",tag:"solve"},
+        {text:"Autopsy — pseudocode precision check",tag:"review"},
+      ]},
+      { label:"Block 2 — Afternoon 💛 (3h)", tasks:[
+        {text:"Do CS P3: 9618/31_Winter_2024 — timed",tag:"solve"},
+        {text:"Autopsy",tag:"review"},
+        {text:"Do CS P4: 9618/41_Winter_2024 — timed",tag:"solve"},
+        {text:"Autopsy — add new code patterns to P4 Code Bank",tag:"review"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Read full CS Phrase Bank out loud — this is your last deep CS review before final days",tag:"tip"},
       ]},
     ]
   },
-  { title:"Day 18 — Full Mock Day 2", cycle:"sprint", cycleLabel:"Final Sprint · Mental Endurance 🌿", focus:"Mock Simulation · Simulate 5-Hour Sessions",
+  // ─── DAY 13 ───
+  { title:"Day 13 — Maths Final Round", cycle:"c4", cycleLabel:"Week 2 · Final Push 🌿", focus:"P1 + P3 + S1 final papers + S2 questions · ~6.5h",
     groups:[
-      { label:"Mock Simulation 💪", tasks:[
-        {text:"Solve a paper from the subject you're LEAST confident in",tag:"mock"},
-        {text:"Solve another subject paper back-to-back — no comfort breaks!",tag:"mock"},
-        {text:"Solve a third subject paper to complete the block",tag:"mock"},
-        {text:"Autopsy all 3 — focus only on examiner phrasing fixes",tag:"review"},
+      { label:"Block 1 — Morning 🌤 (3h)", tasks:[
+        {text:"Do Maths P1: 9709/12_F/M/24 — timed",tag:"solve"},
+        {text:"Mark — are your P1 scores improving? Track your score on a sticky note",tag:"review"},
+        {text:"Do Maths P3: 9709/32_F/M/24 — timed",tag:"solve"},
+        {text:"Mark 9709/32_F/M/24",tag:"review"},
+      ]},
+      { label:"Block 2 — Afternoon 💛 (3h)", tasks:[
+        {text:"Do Maths S1: 9709/52_F/M/24 — timed",tag:"solve"},
+        {text:"Mark and update Stats Phrase Bank",tag:"review"},
+        {text:"Do 8 S2 questions from classified topics (focus: hypothesis testing with Poisson, CRV, CLT)",tag:"solve"},
+        {text:"Mark S2 questions and note any new formula/technique you missed",tag:"review"},
+      ]},
+      { label:"Wind-down 🌙 (30 min)", tasks:[
+        {text:"Re-read Physics P3 Brain Dump + P3 mark scheme phrases you collected",tag:"theory"},
       ]},
     ]
   },
-  { title:"Day 19 — Full Mock Day 3", cycle:"sprint", cycleLabel:"Final Sprint · Mental Endurance 🌿", focus:"Mock Simulation · Peak Performance",
+  // ─── DAY 14 ───
+  { title:"Day 14 — Mock Day + Final Consolidation", cycle:"c4", cycleLabel:"Week 2 · Final Push 🌿", focus:"Full mock simulation + review banks · ~6h",
     groups:[
-      { label:"Mock Simulation 💪", tasks:[
-        {text:"Solve papers from all 3 subjects — pick ones you haven't done yet",tag:"mock"},
-        {text:"Mark and review — aim to keep autopsy time under 30 mins per paper",tag:"review"},
-        {text:"Re-read your full examiner phrase bank (CS + Physics) 💕",tag:"tip"},
+      { label:"Block 1 — Full Mocks Morning 🌤 (3h)", tasks:[
+        {text:"Do Physics P1 MCQ — timed, exam conditions (phone in another room)",tag:"mock"},
+        {text:"Do CS P1 — timed, exam conditions",tag:"mock"},
+        {text:"Do Maths P3 — timed, exam conditions",tag:"mock"},
       ]},
-    ]
-  },
-  { title:"Day 20 — Final Review 🎀", cycle:"sprint", cycleLabel:"Final Sprint · Mental Endurance 🌿", focus:"Light Review + Mental Reset — you're almost there!",
-    groups:[
-      { label:"Morning — Light Review Only 🌸", tasks:[
-        {text:"Re-read all your formula flashcards (no solving!)",tag:"tip"},
-        {text:"Re-read your examiner phrase bank (CS + Physics)",tag:"tip"},
-        {text:"Review your 'tricky MCQ' list from Day 16",tag:"tip"},
+      { label:"Block 2 — Review Afternoon 💛 (2h)", tasks:[
+        {text:"Mark all 3 mock papers — record final scores",tag:"review"},
+        {text:"For each wrong answer today: is it a topic you already flagged as weak, or a new gap?",tag:"review"},
+        {text:"Spend 30 min only on new gaps — don't re-cover already-known territory",tag:"review"},
       ]},
-      { label:"Evening — Rest & Reset 💆‍♀️", tasks:[
-        {text:"No new papers today — your brain needs consolidation time",tag:"tip"},
-        {text:"Prepare your stationery and check exam timetable",tag:"tip"},
-        {text:"Sleep on time — you've done the work. Trust yourself. 🎀✨",tag:"tip"},
+      { label:"Final Consolidation 🌸 (1h)", tasks:[
+        {text:"Re-read: CS Phrase Bank (15 min)",tag:"tip"},
+        {text:"Re-read: Stats Phrase Bank (15 min)",tag:"tip"},
+        {text:"Re-read: Physics P3 key phrases + experiment methods (15 min)",tag:"tip"},
+        {text:"Last thing before sleep: close everything and do a full mental replay of the 14 days — what do you know now that you didn't on Day 1?",tag:"tip"},
       ]},
     ]
   },
@@ -785,6 +846,7 @@ let currentDay = 0;
 let checks     = {};
 let dayNotes   = {};   // { dayIndex: string }
 let customTasks= {};   // { dayIndex: [{id, text, done}] }
+let deletedTasks = {}; // { dayIndex: [{gi, ti, text, tag}] } — soft-deleted built-in tasks
 
 // Pomodoro state
 const MODES = {
@@ -816,6 +878,7 @@ function loadAll() {
     const p = localStorage.getItem('girlyPomoSessions');  if(p) pomoSessions   = parseInt(p)||0;
     const n = localStorage.getItem('girlyDayNotes');      if(n) dayNotes       = JSON.parse(n);
     const c = localStorage.getItem('girlyCustomTasks');   if(c) customTasks    = JSON.parse(c);
+    const x = localStorage.getItem('girlyDeletedTasks');  if(x) deletedTasks   = JSON.parse(x);
   } catch(e) {}
 }
 function saveAll() {
@@ -826,6 +889,7 @@ function saveAll() {
     localStorage.setItem('girlyPomoSessions', pomoSessions);
     localStorage.setItem('girlyDayNotes',     JSON.stringify(dayNotes));
     localStorage.setItem('girlyCustomTasks',  JSON.stringify(customTasks));
+    localStorage.setItem('girlyDeletedTasks', JSON.stringify(deletedTasks));
   } catch(e) {}
 }
 
@@ -835,26 +899,32 @@ function saveAll() {
 function key(d,g,t){ return `d${d}_g${g}_t${t}`; }
 function getCheck(d,g,t){ return !!checks[key(d,g,t)]; }
 function setCheck(d,g,t,v){ checks[key(d,g,t)]=v; saveAll(); }
-function totalForDay(i){ return DAYS[i].groups.reduce((s,g)=>s+g.tasks.length,0); }
-function doneForDay(i) { return DAYS[i].groups.reduce((s,g,gi)=>s+g.tasks.filter((_,ti)=>getCheck(i,gi,ti)).length,0); }
+function isDeleted(d,g,t){ return (deletedTasks[d]||[]).some(x=>x.gi===g && x.ti===t); }
+
+function totalForDay(i){
+  const deleted = (deletedTasks[i]||[]).length;
+  return DAYS[i].groups.reduce((s,g)=>s+g.tasks.length,0) - deleted;
+}
+function doneForDay(i){
+  return DAYS[i].groups.reduce((s,g,gi)=>s+g.tasks.filter((_,ti)=>getCheck(i,gi,ti) && !isDeleted(i,gi,ti)).length,0);
+}
 function isDayTaskDone(i){
-  const builtIn = doneForDay(i)===totalForDay(i);
-  const custom  = (customTasks[i]||[]);
+  const builtInDone = doneForDay(i) === totalForDay(i);
+  const custom = (customTasks[i]||[]);
   const allCustomDone = custom.length===0 || custom.every(t=>t.done);
-  return builtIn && allCustomDone;
+  return builtInDone && allCustomDone;
 }
 function totalAll(){ return DAYS.reduce((s,_,i)=>s+totalForDay(i),0); }
 
-// "done" = tasks done + custom tasks done + bonus days earned
 function doneAll(){
-  const tasksDone   = DAYS.reduce((s,_,i)=>s+doneForDay(i),0);
-  const customDone  = Object.values(customTasks).flat().filter(t=>t.done).length;
-  const bonusDone   = Object.values(bonusEarned).filter(Boolean).length;
+  const tasksDone  = DAYS.reduce((s,_,i)=>s+doneForDay(i),0);
+  const customDone = Object.values(customTasks).flat().filter(t=>t.done).length;
+  const bonusDone  = Object.values(bonusEarned).filter(Boolean).length;
   return tasksDone + customDone + bonusDone;
 }
 function totalAllWithBonus(){
   const customTotal = Object.values(customTasks).flat().length;
-  return totalAll() + customTotal + 20; // 20 possible bonus points
+  return totalAll() + customTotal + 14;
 }
 
 function updateProgress(){
@@ -874,9 +944,9 @@ function updateProgress(){
 function renderBonusPips(){
   const container = document.getElementById('bonusPips');
   const earned    = Object.values(bonusEarned).filter(Boolean).length;
-  document.getElementById('bonusSub').textContent = `${earned} / 20 days with 5+ hours studied`;
+  document.getElementById('bonusSub').textContent = `${earned} / 14 days with 6+ hours studied`;
   container.innerHTML = '';
-  for(let i=0;i<20;i++){
+  for(let i=0;i<14;i++){
     const p = document.createElement('div');
     p.className = 'pip'+(bonusEarned[i]?' earned':'');
     p.textContent = bonusEarned[i] ? '✦' : (i+1);
@@ -1040,7 +1110,7 @@ function updateDailyBar(){
 
 function checkFiveHourBonus(){
   const secs = dailyStudySecs[currentDay] || 0;
-  if(secs >= 5*3600 && !bonusEarned[currentDay]){
+  if(secs >= 6*3600 && !bonusEarned[currentDay]){
     awardBonus(currentDay);
   }
 }
@@ -1061,6 +1131,28 @@ function playChime(){
       osc.stop(ctx.currentTime + i*0.18 + 0.7);
     });
   } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════
+// DELETE / RESTORE BUILT-IN TASKS
+// ═══════════════════════════════════════════════
+function deleteBuiltInTask(dayIdx, gi, ti){
+  if(!deletedTasks[dayIdx]) deletedTasks[dayIdx] = [];
+  // Avoid duplicates
+  if(deletedTasks[dayIdx].some(x=>x.gi===gi && x.ti===ti)) return;
+  const task = DAYS[dayIdx].groups[gi].tasks[ti];
+  deletedTasks[dayIdx].push({ gi, ti, text: task.text, tag: task.tag });
+  // Also uncheck it so it doesn't count
+  setCheck(dayIdx, gi, ti, false);
+  saveAll();
+  renderNav(); renderDay(); updateProgress();
+}
+
+function restoreBuiltInTask(dayIdx, gi, ti){
+  if(!deletedTasks[dayIdx]) return;
+  deletedTasks[dayIdx] = deletedTasks[dayIdx].filter(x=>!(x.gi===gi && x.ti===ti));
+  saveAll();
+  renderNav(); renderDay(); updateProgress();
 }
 
 // ═══════════════════════════════════════════════
@@ -1165,7 +1257,7 @@ function renderDay(){
   const day = DAYS[currentDay];
   const done = doneForDay(currentDay), total = totalForDay(currentDay);
   let html = `<div class="day-panel">`;
-  if(done===total){
+  if(done===total && total > 0){
     html += `<div class="day-complete-banner visible">🌸 Day ${currentDay+1} tasks done — you're absolutely glowing!</div>`;
   }
   html += `<div class="day-header-card">`;
@@ -1174,8 +1266,11 @@ function renderDay(){
   html += `<div class="day-focus">${day.focus} · ${done}/${total} tasks</div>`;
   html += `</div><div class="tasks-card">`;
   day.groups.forEach((grp,gi)=>{
+    const visibleTasks = grp.tasks.filter((_,ti)=>!isDeleted(currentDay,gi,ti));
+    if(visibleTasks.length === 0) return;
     html += `<div class="task-group"><div class="task-group-label">${grp.label}</div>`;
     grp.tasks.forEach((task,ti)=>{
+      if(isDeleted(currentDay,gi,ti)) return;
       const isDone = getCheck(currentDay,gi,ti);
       html += `<div class="task-item${isDone?' done':''}" data-g="${gi}" data-t="${ti}">
         <div class="checkbox"><svg width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -1184,11 +1279,31 @@ function renderDay(){
         <div class="task-content">
           <div class="task-text">${task.text}</div>
           <span class="task-tag ${TAG_CLASSES[task.tag]}">${TAG_LABELS[task.tag]}</span>
-        </div></div>`;
+        </div>
+        <button class="task-delete-btn" data-action="del-builtin" data-g="${gi}" data-t="${ti}" title="Remove this task">✕</button>
+      </div>`;
     });
     html += `</div>`;
   });
-  html += `</div></div>`; // close tasks-card and day-panel
+  html += `</div></div>`;
+
+  // ── Restore deleted built-in tasks ──
+  const deleted = deletedTasks[currentDay] || [];
+  if(deleted.length > 0){
+    html += `<div class="restore-section">
+      <div class="restore-header" id="restoreHeader">
+        <span>↩ ${deleted.length} removed task${deleted.length>1?'s':''} — click to restore</span>
+        <em class="restore-arrow">▾</em>
+      </div>
+      <div class="restore-list" id="restoreList">`;
+    deleted.forEach(t=>{
+      html += `<div class="restore-item">
+        <span class="restore-item-text">${t.text}</span>
+        <button class="restore-btn" data-action="restore" data-g="${t.gi}" data-t="${t.ti}">↩ Restore</button>
+      </div>`;
+    });
+    html += `</div></div>`;
+  }
 
   // ── Custom tasks section ──
   const myTasks = getCustomTasks(currentDay);
@@ -1215,12 +1330,35 @@ function renderDay(){
   html += `</div>`;
 
   panel.innerHTML = html;
+
+  // Built-in task toggle
   panel.querySelectorAll('.task-item').forEach(el=>{
-    el.onclick = ()=>{
+    el.onclick = (e)=>{
+      if(e.target.closest('[data-action="del-builtin"]')) return;
       const gi=+el.dataset.g, ti=+el.dataset.t;
       setCheck(currentDay,gi,ti,!getCheck(currentDay,gi,ti));
       renderNav(); renderDay(); updateProgress();
     };
+  });
+
+  // Built-in task delete
+  panel.querySelectorAll('[data-action="del-builtin"]').forEach(el=>{
+    el.onclick = (e)=>{ e.stopPropagation(); deleteBuiltInTask(currentDay, +el.dataset.g, +el.dataset.t); };
+  });
+
+  // Restore accordion
+  const restoreHeader = document.getElementById('restoreHeader');
+  const restoreList   = document.getElementById('restoreList');
+  if(restoreHeader && restoreList){
+    restoreHeader.onclick = ()=>{
+      restoreHeader.classList.toggle('open');
+      restoreList.classList.toggle('open');
+    };
+  }
+
+  // Restore buttons
+  panel.querySelectorAll('[data-action="restore"]').forEach(el=>{
+    el.onclick = ()=>{ restoreBuiltInTask(currentDay, +el.dataset.g, +el.dataset.t); };
   });
 
   // Custom task interactions
@@ -1234,7 +1372,7 @@ function renderDay(){
     el.onclick = ()=>{ toggleCustomTask(currentDay, el.dataset.cid); };
   });
 
-  // Add task button + enter key
+  // Add task
   const addBtn   = document.getElementById('addTaskBtn');
   const addInput = document.getElementById('addTaskInput');
   if(addBtn && addInput){
@@ -1243,9 +1381,7 @@ function renderDay(){
   }
 }
 
-// ═══════════════════════════════════════════════
-// RESET
-// ═══════════════════════════════════════════════
+11
 document.getElementById('resetBtn').onclick = ()=>{
   DAYS[currentDay].groups.forEach((g,gi)=>g.tasks.forEach((_,ti)=>setCheck(currentDay,gi,ti,false)));
   // Also uncheck custom tasks (but keep them)
